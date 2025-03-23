@@ -12,15 +12,20 @@ def fix_unknown_chars(text: str) -> str:
 class NameFixerPipeline(Text2TextGenerationPipeline):
     def postprocess(self, model_outputs):
         outputs = super().postprocess(model_outputs)
+        structured_outputs = []
         for o in outputs:
             text = fix_unknown_chars(o["generated_text"])
             parts = [p.strip() for p in text.split("|")]
             if len(parts) == 3:
-                o["structured"] = {
+                structured_outputs.append({
                     "first_name": parts[0],
                     "last_name": parts[1],
                     "gender": parts[2]
-                }
+                })
             else:
-                o["structured"] = {"first_name": None, "last_name": None, "gender": None}
-        return outputs
+                structured_outputs.append({
+                    "first_name": None,
+                    "last_name": None,
+                    "gender": None
+                })
+        return structured_outputs
