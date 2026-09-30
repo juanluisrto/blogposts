@@ -1,0 +1,1361 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>¿Me puedo fiar de mis datos?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{
+  --bg:#fbf7f0; --card:#ffffff; --ink:#1d1b2f; --muted:#6c6882; --line:#ece4d6; --soft:#f5efe4; --soft2:#efe7f9;
+  --accent:#5b4cf0; --accent-ink:#ffffff; --coral:#ff7a59; --sun:#ffc94d;
+  --green:#18a866; --amber:#f2a516; --red:#ec4b4b; --dot:#dcd4c6; --dot-null:#ec4b4b;
+  --green-bg:#e3f6ec; --amber-bg:#fff2d6; --red-bg:#fde6e6;
+  --shadow:0 1px 0 rgba(29,27,47,.04),0 10px 30px -12px rgba(29,27,47,.18);
+  --radius:20px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14121d; --card:#1e1b2b; --ink:#f3efe6; --muted:#a7a2bb; --line:#2f2b42; --soft:#262236; --soft2:#2a2542;
+    --accent:#8d80ff; --accent-ink:#14121d; --coral:#ff8f73; --sun:#ffd466;
+    --green:#35cf88; --amber:#ffba3a; --red:#ff6b6b; --dot:#3a354f; --dot-null:#ff6b6b;
+    --green-bg:#153828; --amber-bg:#3b2d10; --red-bg:#3d1b1f;
+    --shadow:0 10px 30px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14121d; --card:#1e1b2b; --ink:#f3efe6; --muted:#a7a2bb; --line:#2f2b42; --soft:#262236; --soft2:#2a2542;
+  --accent:#8d80ff; --accent-ink:#14121d; --coral:#ff8f73; --sun:#ffd466;
+  --green:#35cf88; --amber:#ffba3a; --red:#ff6b6b; --dot:#3a354f; --dot-null:#ff6b6b;
+  --green-bg:#153828; --amber-bg:#3b2d10; --red-bg:#3d1b1f;
+  --shadow:0 10px 30px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "DM Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px}
+h1,h2,.display{font-family:Fraunces,Georgia,serif;letter-spacing:-.015em}
+button{font:inherit;color:inherit}
+input,textarea,select{font:inherit;color:var(--ink)}
+
+/* ---------- Top bar ---------- */
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.brand svg{width:28px;height:28px}
+.toggle{display:inline-flex;align-items:center;gap:10px;cursor:pointer;color:var(--muted);font-weight:500;font-size:14px;user-select:none}
+.toggle input{appearance:none;width:42px;height:24px;border-radius:24px;background:var(--line);position:relative;cursor:pointer;transition:.25s;margin:0}
+.toggle input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--card);transition:.25s cubic-bezier(.5,1.6,.4,1);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked{background:var(--accent)}
+.toggle input:checked::after{left:21px}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;padding:36px 0 26px;text-align:center}
+.hero h1{font-size:clamp(38px,7vw,76px);line-height:1;margin:0 0 16px;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--accent);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.02em;height:.22em;background:var(--sun);opacity:.55;z-index:-1;border-radius:4px}
+.hero p{color:var(--muted);max-width:620px;margin:0 auto;font-size:18px}
+.confetti{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.confetti i{position:absolute;border-radius:50%;opacity:.35;animation:float 9s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@media (prefers-reduced-motion: reduce){.confetti i{animation:none}}
+
+/* ---------- Steps ---------- */
+.step{margin-top:34px}
+.step-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.step-n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:15px;transform:translateY(-4px)}
+.step-h h2{font-size:clamp(24px,3.4vw,32px);margin:0;font-weight:700}
+.step-h .edit{margin-left:auto;font-size:14px;color:var(--accent);background:none;border:0;cursor:pointer;font-weight:600}
+.chips-sum{display:flex;gap:8px;flex-wrap:wrap}
+.sum-chip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);padding:6px 12px 6px 8px;border-radius:999px;font-weight:600;cursor:pointer}
+.sum-chip svg{width:26px;height:26px}
+.choices{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:860px){.choices{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:440px){.choices{grid-template-columns:1fr}}
+.choice{position:relative;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px 16px 16px;cursor:pointer;transition:transform .25s cubic-bezier(.5,1.6,.4,1),border-color .2s,box-shadow .2s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.choice:hover{transform:translateY(-4px) rotate(-.6deg);border-color:var(--accent)}
+.choice.on{border-color:var(--accent);background:linear-gradient(180deg,var(--soft2),var(--card) 70%)}
+.choice.on::after{content:"✓";position:absolute;top:12px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:13px;font-weight:700}
+.choice .ico{width:58px;height:58px;margin-bottom:4px}
+.choice b{font-size:18px;font-family:Fraunces,Georgia,serif}
+.choice span{color:var(--muted);font-size:14px;line-height:1.4}
+.choice .ex{font-size:13px;color:var(--ink);background:var(--soft);border-radius:10px;padding:6px 9px;margin-top:4px;font-style:italic}
+.hidden{display:none!important}
+.fade-in{animation:fadein .5s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- Cards / form ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.formgrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+@media (max-width:860px){.formgrid{grid-template-columns:1fr}}
+.card h3{margin:0 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .lead{margin:0 0 14px;color:var(--muted);font-size:14.5px}
+.f{margin-bottom:14px}
+.f>label,.fl{display:block;font-weight:600;font-size:14.5px;margin-bottom:5px}
+.f .h{display:block;color:var(--muted);font-size:13px;margin:-2px 0 6px;line-height:1.4}
+.inp{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;transition:border-color .15s,box-shadow .15s}
+.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+textarea.inp{min-height:120px;resize:vertical;font-size:14px;line-height:1.5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));align-items:end}
+.big-num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.tabs{display:inline-flex;background:var(--soft);border-radius:12px;padding:3px;gap:2px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:7px 12px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{border:1.5px solid var(--line);background:var(--bg);padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600;font-size:14px;transition:.15s}
+.pill:hover{border-color:var(--accent)}
+.pill.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pill input{width:54px;border:0;background:transparent;padding:0;text-align:right;font-weight:600}
+.pill input:focus{outline:none}
+.parsed{font-size:13px;color:var(--muted);margin-top:6px}
+.grp{border:1.5px dashed var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.grp .gname{font-weight:700;border:0;background:transparent;padding:0;margin-bottom:8px;font-size:15px;width:100%}
+.grp .gname:focus{outline:none;border-bottom:1.5px solid var(--accent)}
+table.ctab{border-collapse:separate;border-spacing:6px;width:100%}
+table.ctab th{font-size:12.5px;color:var(--muted);font-weight:600;text-align:left}
+table.ctab td input{width:100%}
+table.ctab .x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px}
+.addrow{border:1.5px dashed var(--line);background:none;border-radius:10px;padding:6px 10px;cursor:pointer;color:var(--muted);font-weight:600;font-size:13.5px}
+.addrow:hover{border-color:var(--accent);color:var(--accent)}
+.err{color:var(--red);font-weight:600;font-size:14px}
+
+/* ---------- Verdict ---------- */
+.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:26px;align-items:center;position:relative;overflow:hidden}
+@media (max-width:640px){.verdict{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.light{width:92px;background:var(--ink);border-radius:26px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.25)}
+.lamp{width:68px;height:68px;border-radius:50%;background:#3b384d;opacity:.35;transition:all .5s cubic-bezier(.5,1.6,.4,1);position:relative}
+.lamp.r.on{background:var(--red);opacity:1;box-shadow:0 0 28px 6px color-mix(in srgb,var(--red) 70%,transparent)}
+.lamp.a.on{background:var(--amber);opacity:1;box-shadow:0 0 28px 6px color-mix(in srgb,var(--amber) 70%,transparent)}
+.lamp.g.on{background:var(--green);opacity:1;box-shadow:0 0 28px 6px color-mix(in srgb,var(--green) 70%,transparent)}
+.lamp.on{transform:scale(1.04)}
+.v-kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.v-title{font-family:Fraunces,Georgia,serif;font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:4px 0 10px;font-weight:800}
+.v-text{font-size:17px;margin:0 0 14px;max-width:640px}
+.v-green .v-kicker{color:var(--green)} .v-amber .v-kicker{color:var(--amber)} .v-red .v-kicker{color:var(--red)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.fact{background:var(--soft);border-radius:14px;padding:12px 14px}
+.fact b{display:block;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2;font-family:Fraunces,Georgia,serif}
+.fact span{font-size:13px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+.frag{margin-top:14px;border-radius:14px;padding:12px 14px;font-size:15px;display:flex;gap:12px;align-items:flex-start}
+.frag .fi{flex:none;font-size:22px;line-height:1}
+.frag.green{background:var(--green-bg)} .frag.amber{background:var(--amber-bg)} .frag.red{background:var(--red-bg)}
+.people{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px}
+.people i{width:11px;height:11px;border-radius:3px;background:var(--dot)}
+.people i.flip{background:var(--coral);animation:pop .6s cubic-bezier(.5,1.8,.4,1) both}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+/* ---------- Sim ---------- */
+.simbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.seg{display:inline-flex;background:var(--soft);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;padding:8px 12px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.runbtn{border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;padding:10px 18px;border-radius:12px;cursor:pointer;box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 60%,#000);transition:transform .1s}
+.runbtn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 60%,#000)}
+.reps{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.reps input[type=range]{width:170px;accent-color:var(--accent)}
+.reps output{font-weight:700;color:var(--ink);min-width:56px;font-variant-numeric:tabular-nums}
+.simgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.simgrid{grid-template-columns:1fr}}
+canvas#dots{width:100%;display:block;border-radius:14px;background:var(--soft)}
+.counter{font-family:Fraunces,Georgia,serif;font-size:clamp(34px,5vw,52px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.counter small{font-size:.42em;color:var(--muted);font-weight:500;font-family:"DM Sans",sans-serif}
+.simtext{font-size:16px;margin:8px 0 12px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+svg .gl{stroke:var(--line)} svg .ax{stroke:var(--muted)}
+svg .tk{fill:var(--muted);font-size:11px;font-family:"DM Sans",sans-serif}
+svg .lb{fill:var(--ink);font-size:12px;font-weight:700;font-family:"DM Sans",sans-serif}
+
+/* ---------- Plan ---------- */
+.plan-top{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:10px}
+.plan-n{font-family:Fraunces,Georgia,serif;font-size:clamp(40px,6vw,60px);font-weight:800;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.plan-slider{display:flex;align-items:center;gap:12px;margin:12px 0 4px;flex-wrap:wrap}
+.plan-slider input{flex:1;min-width:160px;accent-color:var(--accent)}
+.plan-slider output{font-weight:700;min-width:130px;font-variant-numeric:tabular-nums}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-120%);opacity:0;transition:opacity .1s;z-index:10}
+
+/* ---------- Advanced ---------- */
+.adv{display:none}
+body.advanced .adv{display:block}
+.formula{margin:6px 0 16px;overflow-x:auto;overflow-y:hidden}
+.formula p{margin:0 0 2px;color:var(--muted);font-size:14px}
+table.nums{border-collapse:collapse;width:100%;font-size:14.5px}
+table.nums td{padding:8px 6px;border-bottom:1px solid var(--line)}
+table.nums td:last-child{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.badge{display:inline-block;background:var(--soft2);color:var(--accent);font-weight:700;font-size:13px;border-radius:999px;padding:3px 10px;margin-bottom:10px}
+footer{margin-top:50px;color:var(--muted);font-size:13.5px;text-align:center}
+.busy{display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><svg viewBox="0 0 32 32"><circle cx="9" cy="22" r="4" fill="var(--accent)"/><circle cx="17" cy="14" r="4" fill="var(--coral)"/><circle cx="25" cy="8" r="4" fill="var(--sun)"/></svg>¿Me fío?</div>
+    <label class="toggle"><input type="checkbox" id="advToggle"> Modo avanzado</label>
+  </div>
+
+  <section class="hero">
+    <div class="confetti" id="confetti"></div>
+    <h1>¿Me puedo fiar<br>de <em>mis datos</em>?</h1>
+    <p>Cuéntame qué has medido, mete cuatro números y te digo cómo de sólida es tu conclusión, qué pasaría si repitieras el estudio y cuántos datos te harían falta.</p>
+  </section>
+
+  <section class="step" id="s1">
+    <div class="step-h"><span class="step-n">1</span><h2>¿Qué es cada dato?</h2><button class="edit hidden" data-edit="1">Cambiar</button></div>
+    <div class="choices" id="typeChoices"></div>
+    <div class="chips-sum hidden" id="typeSum"></div>
+  </section>
+
+  <section class="step hidden" id="s2">
+    <div class="step-h"><span class="step-n">2</span><h2>¿Qué quieres saber?</h2><button class="edit hidden" data-edit="2">Cambiar</button></div>
+    <div class="choices" id="goalChoices"></div>
+    <div class="chips-sum hidden" id="goalSum"></div>
+  </section>
+
+  <section class="step hidden" id="s3">
+    <div class="step-h"><span class="step-n">3</span><h2>Tus datos</h2></div>
+    <div class="formgrid">
+      <div class="card"><h3>Lo que has observado</h3><p class="lead" id="formLead"></p><div id="form"></div></div>
+      <div class="card"><h3>Tus exigencias</h3><p class="lead">Lo estricto que quieres ser antes de dar algo por bueno.</p><div id="settings"></div></div>
+    </div>
+  </section>
+
+  <section class="step hidden" id="s4">
+    <div class="step-h"><span class="step-n">4</span><h2>El veredicto</h2></div>
+    <div class="card verdict" id="verdict"></div>
+  </section>
+
+  <section class="step hidden" id="s5">
+    <div class="step-h"><span class="step-n">5</span><h2>Repite tu estudio</h2></div>
+    <div class="card">
+      <p class="lead" id="simLead"></p>
+      <div class="simbar">
+        <div class="seg" id="simMode">
+          <button data-m="real" class="on">Si lo que viste es la verdad</button>
+          <button data-m="null">Si no hubiera ningún efecto</button>
+        </div>
+        <div class="reps">Repeticiones <input type="range" id="reps" min="0" max="100" step="1" value="50"><output id="repsOut"></output>
+          <button class="runbtn" id="runSim">▶ Repetir</button></div>
+      </div>
+      <div class="simgrid">
+        <div><canvas id="dots" height="340"></canvas><div class="legend" id="simLegend"></div></div>
+        <div>
+          <div class="counter" id="simCounter">0</div>
+          <p class="simtext" id="simText"></p>
+          <div class="chart" id="simHist"></div>
+        </div>
+      </div>
+      <p class="adv" style="font-size:13px;color:var(--muted);margin:14px 0 0" id="simAdv"></p>
+    </div>
+  </section>
+
+  <section class="step hidden" id="s6">
+    <div class="step-h"><span class="step-n">6</span><h2>¿Cuántos datos necesitas?</h2></div>
+    <div class="card">
+      <div id="planHead"></div>
+      <div class="plan-slider"><span id="planSlLabel">Prueba otro tamaño</span><input type="range" id="planN" min="0" max="1000" value="500"><output id="planOut"></output></div>
+      <div class="chart" id="planChart"></div>
+      <p class="lead" id="planNote" style="margin-top:10px"></p>
+    </div>
+  </section>
+
+  <section class="step adv hidden" id="s7">
+    <div class="step-h"><span class="step-n">∑</span><h2>Bajo el capó</h2></div>
+    <div class="card"><span class="badge" id="advTest"></span><div id="formulas"></div><h3 style="margin-top:6px">Números del cálculo</h3><table class="nums" id="advTable"></table></div>
+  </section>
+
+  <footer>Todo se calcula en tu navegador. Tests exactos cuando existen; si no, simulación (permutación, bootstrap o Monte Carlo). Nunca la aproximación normal, salvo como comparativa.</footer>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+/* =====================================================================
+   Librería estadística (todo exacto salvo donde se indica Monte Carlo)
+   ===================================================================== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function makeNorm(rng){ let spare=null; return ()=>{ if(spare!==null){const s=spare;spare=null;return s;} let u,v,s; do{u=rng()*2-1;v=rng()*2-1;s=u*u+v*v;}while(s>=1||s===0); const m=Math.sqrt(-2*Math.log(s)/s); spare=v*m; return u*m; }; }
+// Gamma(shape) — Marsaglia & Tsang
+function rgamma(shape,rng,norm){
+  if(shape<1){ return rgamma(shape+1,rng,norm)*Math.pow(rng(),1/shape); }
+  const d=shape-1/3, c=1/Math.sqrt(9*d);
+  for(;;){ let x,v; do{ x=norm(); v=1+c*x; }while(v<=0); v=v*v*v; const u=rng();
+    if(u<1-0.0331*x*x*x*x) return d*v; if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v))) return d*v; }
+}
+
+const LF=[0];
+function lf(n){ while(LF.length<=n) LF.push(LF[LF.length-1]+Math.log(LF.length)); return LF[n]; }
+function lchoose(n,k){ return lf(n)-lf(k)-lf(n-k); }
+function lgamma(x){ const g=7,c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(x<0.5) return Math.log(Math.PI/Math.abs(Math.sin(Math.PI*x)))-lgamma(1-x);
+  x-=1; let a=c[0]; const t=x+g+0.5; for(let i=1;i<9;i++) a+=c[i]/(x+i); return 0.5*Math.log(2*Math.PI)+(x+0.5)*Math.log(t)-t+Math.log(a); }
+
+/* ---------- Binomial ---------- */
+function binomPMF(n,p){
+  const a=new Float64Array(n+1);
+  if(p<=0){a[0]=1;return a;} if(p>=1){a[n]=1;return a;}
+  let m=Math.floor((n+1)*p); if(m>n) m=n;
+  a[m]=Math.exp(lchoose(n,m)+m*Math.log(p)+(n-m)*Math.log1p(-p));
+  const r=p/(1-p);
+  for(let k=m;k<n;k++) a[k+1]=a[k]*(n-k)/(k+1)*r;
+  for(let k=m;k>0;k--) a[k-1]=a[k]*k/((n-k+1)*r);
+  return a;
+}
+function binomUpper(n,k,p){ if(k<=0) return 1; if(k>n) return 0; const f=binomPMF(n,p); let s=0; for(let j=n;j>=k;j--) s+=f[j]; return Math.min(1,s); }
+function binomLower(n,k,p){ if(k<0) return 0; if(k>=n) return 1; const f=binomPMF(n,p); let s=0; for(let j=0;j<=k;j++) s+=f[j]; return Math.min(1,s); }
+function binomTest(n,k,p0,alt){
+  if(alt==='gt') return binomUpper(n,k,p0);
+  if(alt==='lt') return binomLower(n,k,p0);
+  return Math.min(1,2*Math.min(binomUpper(n,k,p0),binomLower(n,k,p0)));
+}
+function cpLower(n,k,a){ if(k<=0) return 0; let lo=0,hi=1; for(let i=0;i<55;i++){ const m=(lo+hi)/2; if(binomUpper(n,k,m)<a) lo=m; else hi=m; } return (lo+hi)/2; }
+function cpUpper(n,k,a){ if(k>=n) return 1; let lo=0,hi=1; for(let i=0;i<55;i++){ const m=(lo+hi)/2; if(binomLower(n,k,m)>a) lo=m; else hi=m; } return (lo+hi)/2; }
+const TOL=1+1e-9;
+// Región de rechazo exacta: X<=kL o X>=kU
+function critBin(n,p0,alpha,alt){
+  const f=binomPMF(n,p0), a=alt==='ne'?alpha/2:alpha; let kU=n+1,kL=-1;
+  if(alt!=='lt'){ let s=0; for(let k=n;k>=0;k--){ s+=f[k]; if(s>a*TOL) break; kU=k; } }
+  if(alt!=='gt'){ let s=0; for(let k=0;k<=n;k++){ s+=f[k]; if(s>a*TOL) break; kL=k; } }
+  let size=0; for(let k=0;k<=kL;k++) size+=f[k]; for(let k=kU;k<=n;k++) size+=f[k];
+  return {kL,kU,size};
+}
+function powerBin(n,p0,p1,alpha,alt){
+  const c=critBin(n,p0,alpha,alt), f=binomPMF(n,p1); let s=0;
+  for(let k=0;k<=c.kL;k++) s+=f[k]; for(let k=c.kU;k<=n;k++) s+=f[k];
+  return Math.min(1,s);
+}
+// Fisher exacto. alt se refiere a B frente a A ('gt': pB>pA)
+function fisherP(nA,kA,nB,kB,alt){
+  const t=kA+kB, N=nA+nB, lo=Math.max(0,t-nA), hi=Math.min(nB,t), base=lchoose(N,t);
+  let up=0,dn=0;
+  for(let j=lo;j<=hi;j++){ const p=Math.exp(lchoose(nB,j)+lchoose(nA,t-j)-base); if(j>=kB) up+=p; if(j<=kB) dn+=p; }
+  up=Math.min(1,up); dn=Math.min(1,dn);
+  return alt==='gt'?up:alt==='lt'?dn:Math.min(1,2*Math.min(up,dn));
+}
+// Potencia exacta de Fisher con n por grupo
+function powerFisher(n,pA,pB,alpha,alt){
+  const fA=binomPMF(n,pA), fB=binomPMF(n,pB), a=alt==='ne'?alpha/2:alpha;
+  const doUp=alt!=='lt', doDn=alt!=='gt'; let pw=0; const row=new Float64Array(n+1);
+  for(let t=0;t<=2*n;t++){
+    const lo=Math.max(0,t-n), hi=Math.min(n,t);
+    let m=Math.floor((t+1)/2); if(m<lo)m=lo; if(m>hi)m=hi;
+    row[m]=Math.exp(lchoose(n,m)+lchoose(n,t-m)-lchoose(2*n,t));
+    for(let j=m;j<hi;j++) row[j+1]=row[j]*((n-j)*(t-j))/((j+1)*(n-t+j+1));
+    for(let j=m;j>lo;j--) row[j-1]=row[j]*(j*(n-t+j))/((n-j+1)*(t-j+1));
+    if(doUp){ let s=0,c=hi+1; for(let j=hi;j>=lo;j--){ s+=row[j]; if(s>a*TOL) break; c=j; } for(let j=c;j<=hi;j++) pw+=fB[j]*fA[t-j]; }
+    if(doDn){ let s=0,c=lo-1; for(let j=lo;j<=hi;j++){ s+=row[j]; if(s>a*TOL) break; c=j; } for(let j=lo;j<=c;j++) pw+=fB[j]*fA[t-j]; }
+  }
+  return Math.min(1,pw);
+}
+// Potencia exacta de un test condicional "c de m ~ Bin(m, θ0)" donde m ~ Bin(N, π): McNemar, ganador, etc.
+function powerCond(N,pi,theta1,theta0,alpha,alt){
+  const fm=binomPMF(N,pi); let pw=0; const mx=Math.max(...fm);
+  for(let m=0;m<=N;m++){ if(fm[m]<mx*1e-12) continue; const c=critBin(m,theta0,alpha,alt), f=binomPMF(m,theta1); let s=0;
+    for(let k=0;k<=c.kL;k++) s+=f[k]; for(let k=c.kU;k<=m;k++) s+=f[k]; pw+=fm[m]*s; }
+  return Math.min(1,pw);
+}
+
+/* ---------- Poisson ---------- */
+function poisTerms(mu,kmax){
+  const a=new Float64Array(kmax+1); if(mu<=0){a[0]=1;return a;}
+  const m=Math.min(kmax,Math.floor(mu)); a[m]=Math.exp(-mu+m*Math.log(mu)-lf(m));
+  for(let k=m;k<kmax;k++) a[k+1]=a[k]*mu/(k+1); for(let k=m;k>0;k--) a[k-1]=a[k]*k/mu; return a;
+}
+function poisLower(k,mu){ if(k<0) return 0; const a=poisTerms(mu,k); let s=0; for(let i=0;i<=k;i++) s+=a[i]; return Math.min(1,s); }
+function poisUpper(k,mu){ if(k<=0) return 1; const K=Math.ceil(Math.max(k,mu)+14*Math.sqrt(Math.max(mu,1))+40); const a=poisTerms(mu,K); let s=0; for(let i=K;i>=k;i--) s+=a[i]; return Math.min(1,s); }
+function poisTest(k,mu0,alt){ if(alt==='gt') return poisUpper(k,mu0); if(alt==='lt') return poisLower(k,mu0); return Math.min(1,2*Math.min(poisUpper(k,mu0),poisLower(k,mu0))); }
+function garLower(k,a){ if(k<=0) return 0; let lo=0,hi=k+20*Math.sqrt(k)+50; for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(poisUpper(k,m)<a) lo=m; else hi=m; } return (lo+hi)/2; }
+function garUpper(k,a){ let lo=0,hi=k+20*Math.sqrt(k+1)+50; for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(poisLower(k,m)>a) lo=m; else hi=m; } return (lo+hi)/2; }
+function critPois(mu0,alpha,alt){
+  const K=Math.ceil(mu0+14*Math.sqrt(Math.max(mu0,1))+60), f=poisTerms(mu0,K), a=alt==='ne'?alpha/2:alpha; let kU=Infinity,kL=-1;
+  if(alt!=='lt'){ let s=0; for(let k=K;k>=0;k--){ s+=f[k]; if(s>a*TOL) break; kU=k; } }
+  if(alt!=='gt'){ let s=0; for(let k=0;k<=K;k++){ s+=f[k]; if(s>a*TOL) break; kL=k; } }
+  return {kL,kU};
+}
+function powerPois(mu0,mu1,alpha,alt){ const c=critPois(mu0,alpha,alt); let p=0; if(c.kL>=0) p+=poisLower(c.kL,mu1); if(isFinite(c.kU)) p+=poisUpper(c.kU,mu1); return Math.min(1,p); }
+// Dos tasas: kB | kA+kB ~ Bin(t, TB/(TA+TB)) bajo H0
+function rateTest(kA,TA,kB,TB,alt){ return binomTest(kA+kB,kB,TB/(TA+TB),alt); }
+function powerRates(T,rA,rB,alpha,alt){ // exposición T por grupo
+  const mu=(rA+rB)*T, K=Math.ceil(mu+14*Math.sqrt(Math.max(mu,1))+40), ft=poisTerms(mu,K), th=rB/(rA+rB); let pw=0; const mx=Math.max(...ft);
+  for(let t=0;t<=K;t++){ if(ft[t]<mx*1e-12) continue; const c=critBin(t,0.5,alpha,alt), f=binomPMF(t,th); let s=0;
+    for(let k=0;k<=c.kL;k++) s+=f[k]; for(let k=c.kU;k<=t;k++) s+=f[k]; pw+=ft[t]*s; }
+  return Math.min(1,pw);
+}
+
+/* ---------- Normal, t, χ² ---------- */
+function erfc(x){ const z=Math.abs(x), t=1/(1+0.5*z); const r=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+t*(-0.82215223+t*0.17087277))))))))); return x>=0?r:2-r; }
+function pnorm(z){ return 0.5*erfc(-z/Math.SQRT2); }
+function qnorm(p){
+  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+  const b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01];
+  const c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+  const d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00], pl=0.02425;
+  if(p<pl){const q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p>1-pl){const q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  const q=p-0.5,r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+function betacf(a,b,x){ const FP=1e-300; let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap; if(Math.abs(d)<FP)d=FP; d=1/d; let h=d;
+  for(let m=1;m<=300;m++){ const m2=2*m; let aa=m*(b-m)*x/((qam+m2)*(a+m2)); d=1+aa*d; if(Math.abs(d)<FP)d=FP; c=1+aa/c; if(Math.abs(c)<FP)c=FP; d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2)); d=1+aa*d; if(Math.abs(d)<FP)d=FP; c=1+aa/c; if(Math.abs(c)<FP)c=FP; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<3e-14) break; }
+  return h; }
+function ibeta(x,a,b){ if(x<=0) return 0; if(x>=1) return 1; const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)? bt*betacf(a,b,x)/a : 1-bt*betacf(b,a,1-x)/b; }
+function pt(t,df){ if(!isFinite(t)) return t>0?1:0; const x=df/(df+t*t), ib=ibeta(x,df/2,0.5); return t>0?1-0.5*ib:0.5*ib; }
+function qt(p,df){ let lo=-50,hi=50; while(pt(lo,df)>p) lo*=2; while(pt(hi,df)<p) hi*=2; for(let i=0;i<80;i++){ const m=(lo+hi)/2; if(pt(m,df)<p) lo=m; else hi=m; } return (lo+hi)/2; }
+function tP(t,df,alt){ return alt==='gt'?1-pt(t,df):alt==='lt'?pt(t,df):Math.min(1,2*Math.min(pt(t,df),1-pt(t,df))); }
+function gammaP(a,x){ if(x<=0) return 0;
+  if(x<a+1){ let sum=1/a,del=sum,ap=a; for(let n=0;n<1000;n++){ ap++; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-14) break; } return sum*Math.exp(-x+a*Math.log(x)-lgamma(a)); }
+  let b=x+1-a,c=1e300,d=1/b,h=d; for(let i=1;i<1000;i++){ const an=-i*(i-a); b+=2; d=an*d+b; if(Math.abs(d)<1e-300)d=1e-300; c=b+an/c; if(Math.abs(c)<1e-300)c=1e-300; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<1e-14) break; }
+  return 1-Math.exp(-x+a*Math.log(x)-lgamma(a))*h; }
+function chisqUpper(x,df){ return df<=0?1:Math.max(0,1-gammaP(df/2,x/2)); }
+
+/* ---------- Números ---------- */
+function mean(x){ let s=0; for(const v of x) s+=v; return s/x.length; }
+function sdev(x){ const m=mean(x); let s=0; for(const v of x) s+=(v-m)*(v-m); return Math.sqrt(s/(x.length-1)); }
+function tOne(m,s,n,mu0,alt){ const t=(m-mu0)/(s/Math.sqrt(n)); return {t,df:n-1,p:tP(t,n-1,alt)}; }
+function welch(mA,sA,nA,mB,sB,nB,alt){ const vA=sA*sA/nA, vB=sB*sB/nB, se=Math.sqrt(vA+vB), t=(mB-mA)/se, df=(vA+vB)*(vA+vB)/(vA*vA/(nA-1)+vB*vB/(nB-1)); return {t,df,se,p:tP(t,df,alt)}; }
+// Permutación de signos (test exacto bajo simetría, Monte Carlo con R réplicas)
+function signFlip(d,R,seed,alt){
+  const rng=mulberry32(seed), n=d.length, obs=mean(d); let c=0;
+  for(let r=0;r<R;r++){ let s=0; for(let i=0;i<n;i++) s+=(rng()<0.5?-d[i]:d[i]); s/=n;
+    if(alt==='gt'?s>=obs-1e-12:alt==='lt'?s<=obs+1e-12:Math.abs(s)>=Math.abs(obs)-1e-12) c++; }
+  return (c+1)/(R+1);
+}
+function perm2(xA,xB,R,seed,alt){
+  const rng=mulberry32(seed), all=xA.concat(xB), N=all.length, nA=xA.length, obs=mean(xB)-mean(xA), tot=all.reduce((a,b)=>a+b,0); let c=0;
+  const arr=Float64Array.from(all);
+  for(let r=0;r<R;r++){ let sA=0; for(let i=0;i<nA;i++){ const j=i+Math.floor(rng()*(N-i)); const t=arr[i]; arr[i]=arr[j]; arr[j]=t; sA+=arr[i]; }
+    const s=(tot-sA)/(N-nA)-sA/nA; if(alt==='gt'?s>=obs-1e-12:alt==='lt'?s<=obs+1e-12:Math.abs(s)>=Math.abs(obs)-1e-12) c++; }
+  return (c+1)/(R+1);
+}
+function quantile(sorted,q){ const i=(sorted.length-1)*q, lo=Math.floor(i), hi=Math.ceil(i); return sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo); }
+function bootMean(x,R,seed){ const rng=mulberry32(seed), n=x.length, out=new Float64Array(R); for(let r=0;r<R;r++){ let s=0; for(let i=0;i<n;i++) s+=x[Math.floor(rng()*n)]; out[r]=s/n; } return out.sort(); }
+function bootDiff(xA,xB,R,seed){ const rng=mulberry32(seed), out=new Float64Array(R), nA=xA.length, nB=xB.length;
+  for(let r=0;r<R;r++){ let a=0,b=0; for(let i=0;i<nA;i++) a+=xA[Math.floor(rng()*nA)]; for(let i=0;i<nB;i++) b+=xB[Math.floor(rng()*nB)]; out[r]=b/nB-a/nA; } return out.sort(); }
+
+/* ---------- Categorías ---------- */
+function chi2Stat(A,B){ const nA=A.reduce((a,b)=>a+b,0), nB=B.reduce((a,b)=>a+b,0), N=nA+nB; let s=0;
+  for(let i=0;i<A.length;i++){ const c=A[i]+B[i]; if(!c) continue; const eA=c*nA/N, eB=c*nB/N; s+=(A[i]-eA)**2/eA+(B[i]-eB)**2/eB; } return s; }
+function chi2MC(A,B,R,seed){
+  const rng=mulberry32(seed), K=A.length, nA=A.reduce((a,b)=>a+b,0), lab=[]; for(let i=0;i<K;i++) for(let j=0;j<A[i]+B[i];j++) lab.push(i);
+  const arr=Int32Array.from(lab), N=arr.length, obs=chi2Stat(A,B), tot=A.map((a,i)=>a+B[i]); let c=0; const cA=new Array(K);
+  for(let r=0;r<R;r++){ cA.fill(0); for(let i=0;i<nA;i++){ const j=i+Math.floor(rng()*(N-i)); const t=arr[i]; arr[i]=arr[j]; arr[j]=t; cA[arr[i]]++; }
+    if(chi2Stat(cA,tot.map((t,i)=>t-cA[i]))>=obs-1e-9) c++; }
+  return (c+1)/(R+1);
+}
+function bowkerStat(T){ const K=T.length; let s=0,df=0; for(let i=0;i<K;i++) for(let j=i+1;j<K;j++){ const m=T[i][j]+T[j][i]; if(m>0){ s+=(T[i][j]-T[j][i])**2/m; df++; } } return {s,df}; }
+function bowkerMC(T,R,seed){
+  const rng=mulberry32(seed), K=T.length, obs=bowkerStat(T).s, pairs=[];
+  for(let i=0;i<K;i++) for(let j=i+1;j<K;j++){ const m=T[i][j]+T[j][i]; if(m>0) pairs.push({m,s:binomSampler(m,0.5)}); }
+  let c=0; for(let r=0;r<R;r++){ let s=0; for(const p of pairs){ const x=p.s(rng); s+=(2*x-p.m)**2/p.m; } if(s>=obs-1e-9) c++; }
+  return (c+1)/(R+1);
+}
+
+/* ---------- Muestreadores ---------- */
+function cdfSampler(pmf){ const c=new Float64Array(pmf.length); let s=0; for(let i=0;i<pmf.length;i++){ s+=pmf[i]; c[i]=s; }
+  return rng=>{ const u=rng()*s; let lo=0,hi=c.length-1; while(lo<hi){ const m=(lo+hi)>>1; if(c[m]<u) lo=m+1; else hi=m; } return lo; }; }
+function binomSampler(n,p){ return cdfSampler(binomPMF(n,p)); }
+function poisSampler(mu){ return cdfSampler(poisTerms(mu,Math.ceil(mu+14*Math.sqrt(Math.max(mu,1))+30))); }
+function catSampler(probs){ return cdfSampler(Float64Array.from(probs)); }
+function multinom(n,probs,rng,samp){ const out=new Array(probs.length).fill(0); for(let i=0;i<n;i++) out[samp(rng)]++; return out; }
+</script>
+<script>
+/* =====================================================================
+   Formato y utilidades
+   ===================================================================== */
+const NB='\u00a0';
+const pct=(x,d=1)=>(100*x).toLocaleString('es-ES',{minimumFractionDigits:d,maximumFractionDigits:d})+NB+'%';
+const pct0=x=>{ const v=100*x; return (Math.abs(v-Math.round(v))<1e-9?Math.round(v).toLocaleString('es-ES'):v.toLocaleString('es-ES',{maximumFractionDigits:1}))+NB+'%'; };
+const pp=x=>(100*x).toLocaleString('es-ES',{maximumFractionDigits:1})+NB+'pp';
+const fmtInt=n=>Math.round(n).toLocaleString('es-ES');
+const fnum=(x,d=2)=>{ if(!isFinite(x)) return '—'; const a=Math.abs(x), dd=a>=1000?0:a>=100?1:d; return x.toLocaleString('es-ES',{maximumFractionDigits:dd}); };
+const fmtP=p=>p<0.001?'<'+NB+'0,1'+NB+'%':pct(p,p<0.1?2:1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const int=v=>{ const x=Math.round(Number(String(v).replace(',','.'))); return isFinite(x)?x:NaN; };
+const numv=v=>{ const x=Number(String(v).replace(',','.')); return isFinite(x)?x:NaN; };
+const plural=w=>{ w=String(w||'periodo').trim(); return /[aeiouáéíóú]$/i.test(w)?w+'s':w+'es'; };
+const err=msg=>({error:msg});
+const fragLimit=n=>Math.max(2,Math.ceil(0.02*n));
+const altWord=a=>a==='gt'?'mayor que':a==='lt'?'menor que':'distinto de';
+const altOpp=a=>a==='gt'?'como mucho':a==='lt'?'al menos':'igual a';
+
+function parseNums(s){ const out=[]; for(const tok of String(s||'').split(/[\s;]+/)){ if(!tok) continue;
+  if(/^-?\d+,\d+$/.test(tok)) out.push(parseFloat(tok.replace(',','.')));
+  else for(const t of tok.split(',')){ if(t==='') continue; const v=parseFloat(t); if(isFinite(v)) out.push(v); } } return out; }
+function getNum(o,label){
+  const L=label?` (${label})`:'';
+  if(o.method==='raw'){ const xs=parseNums(o.raw); if(xs.length<3) return {error:`Pega al menos 3 valores${L}.`}; const s=sdev(xs); if(!(s>0)) return {error:`Todos los valores son iguales${L}: no hay variación que analizar.`}; return {raw:true,xs,n:xs.length,m:mean(xs),s}; }
+  const n=int(o.n); if(!(n>=2)) return {error:`El tamaño de muestra debe ser al menos 2${L}.`};
+  if(o.method==='range'){ const mn=numv(o.min), mx=numv(o.max); if(!(mx>mn)) return {error:`El máximo debe ser mayor que el mínimo${L}.`}; const m=isFinite(numv(o.mean))?numv(o.mean):(mn+mx)/2; return {raw:false,n,m,s:(mx-mn)/4,fromRange:true}; }
+  const m=numv(o.mean), s=numv(o.sd); if(!isFinite(m)) return {error:`Falta la media${L}.`}; if(!(s>0)) return {error:`La desviación típica debe ser mayor que 0${L}.`}; return {raw:false,n,m,s};
+}
+function colorFrag(sig,frag,n){ const L=fragLimit(n); if(sig) return (frag==null||frag>L)?'green':'amber'; return (frag!=null&&frag<=L)?'amber':'red'; }
+function colorP(p,a){ return p<=a/2?'green':p<=2*a?'amber':'red'; }
+function testHead(color,sig){
+  if(color==='green') return {kicker:'Resultado sólido',title:'Puedes afirmarlo'};
+  if(color==='amber') return sig?{kicker:'Resultado frágil',title:'Sí… pero por los pelos'}:{kicker:'Muy cerca',title:'Casi, pero todavía no'};
+  return {kicker:'Evidencia insuficiente',title:'No puedes afirmarlo (todavía)'};
+}
+function estHead(color){
+  if(color==='green') return {kicker:'Estimación precisa',title:'Te puedes fiar del número'};
+  if(color==='amber') return {kicker:'Precisión justita',title:'Orientativo, pero con margen amplio'};
+  return {kicker:'Demasiado imprecisa',title:'El rango es demasiado ancho'};
+}
+function fragBox(color,html,people){ return {color,icon:color==='green'?'🧱':color==='amber'?'🪶':'🔍',html,people}; }
+function pFallbackFrag(p,a,sig){
+  const html=sig
+    ? (p<=a/2?`El p-valor (${fmtP(p)}) está holgadamente por debajo de tu límite (${pct0(a)}).`:`El p-valor (${fmtP(p)}) está justo por debajo de tu límite (${pct0(a)}): un poco de ruido podría cambiar la conclusión.`)
+    : (p<=2*a?`El p-valor (${fmtP(p)}) está cerca de tu límite (${pct0(a)}): con algo más de datos podría cambiar.`:`El p-valor (${fmtP(p)}) está lejos de tu límite (${pct0(a)}).`);
+  return fragBox(colorP(p,a),html+' <span style="opacity:.75">(Aquí la fragilidad se mide por la distancia del p-valor al límite.)</span>');
+}
+// Visual de "personas" que tendrían que cambiar su respuesta
+function people(n,yes,from,count){
+  if(n>400||count==null) return '';
+  let s='<div class="people">';
+  for(let i=0;i<n;i++){ const isYes=i<yes; let flip=false;
+    if(from==='yes'&&isYes&&i>=yes-count) flip=true;
+    if(from==='no'&&!isYes&&i<yes+count) flip=true;
+    s+=`<i class="${flip?'flip':''}" style="${!flip&&isYes?'background:var(--accent);opacity:.75':''}${flip?`;animation-delay:${(0.02*(i%40)).toFixed(2)}s`:''}"></i>`; }
+  return s+'</div>';
+}
+function catBars(names,series,opts={}){ // series: [{label,counts,color}], intervalos opcionales
+  const K=names.length, W=520, rowH=series.length>1?38:28, H=K*rowH+22, L=Math.min(170,Math.max(70,Math.max(...names.map(n=>n.length))*7.2));
+  const mx=Math.max(...series.map(s=>{ const t=s.counts.reduce((a,b)=>a+b,0)||1; return Math.max(...s.counts.map((c,i)=>Math.max(c/t,s.hi?s.hi[i]:0))); }))*1.08||1;
+  const x=v=>L+v/mx*(W-L-50); let g=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+  names.forEach((nm,i)=>{ const y0=i*rowH+6; g+=`<text class="tk" x="${L-8}" y="${y0+(rowH-8)/2+4}" text-anchor="end" style="font-size:12.5px;fill:var(--ink)">${esc(nm)}</text>`;
+    series.forEach((s,j)=>{ const t=s.counts.reduce((a,b)=>a+b,0)||1, v=s.counts[i]/t, bh=(rowH-10)/series.length, y=y0+j*bh;
+      g+=`<rect x="${L}" y="${y}" width="${Math.max(1,x(v)-L)}" height="${bh-2}" rx="4" fill="${s.color}" opacity=".85"/>`;
+      if(s.lo){ g+=`<line x1="${x(s.lo[i])}" x2="${x(s.hi[i])}" y1="${y+(bh-2)/2}" y2="${y+(bh-2)/2}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${x(s.lo[i])}" x2="${x(s.lo[i])}" y1="${y+2}" y2="${y+bh-4}" stroke="var(--ink)" stroke-width="1.6"/><line x1="${x(s.hi[i])}" x2="${x(s.hi[i])}" y1="${y+2}" y2="${y+bh-4}" stroke="var(--ink)" stroke-width="1.6"/>`; }
+      g+=`<text class="tk" x="${(s.hi?x(s.hi[i]):x(v))+6}" y="${y+(bh-2)/2+4}">${pct0(v)}</text>`; }); });
+  let leg=''; if(series.length>1) leg=`<div class="legend">${series.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`).join('')}</div>`;
+  return `<div class="chart" style="max-width:560px;margin-top:14px">${g}</svg>${leg}</div>`;
+}
+const SEED=20260930;
+
+/* =====================================================================
+   Casos
+   Cada caso: def(), form[], settings[], analyze(d,st) -> R
+   R: color, kicker, title, text, facts, frag, viz, hasNull, sim(mode,N), plan, adv
+   ===================================================================== */
+const CASES={};
+const TX=String.raw;
+
+/* ---------------- Sí/no ---------------- */
+CASES['bin-est']={
+  test:'Intervalo exacto de Clopper–Pearson',
+  lead:'Cuántas respuestas tienes en total y cuántas son «sí».',
+  def:()=>({unit:'empresas',label:'no quieren externalizar',n:140,k:84,margin:5}),
+  form:[{t:'text',k:'unit',label:'¿Qué cuentas?'},{t:'text',k:'label',label:'¿Qué significa «sí»?',hint:'Se usa en las frases del resultado. Ej.: «no quieren externalizar».'},{t:'row',items:[{k:'n',label:'Total de respuestas'},{k:'k',label:'Responden «sí»'}]}],
+  settings:['alpha','margin'], marginUnit:'pp', marginHint:'Cuánto error aceptas en el porcentaje, en puntos porcentuales.',
+  analyze(d,st){
+    const n=int(d.n),k=int(d.k),a=st.alpha,m=numv(d.margin)/100;
+    if(!(n>=1)) return err('Necesito al menos una respuesta.'); if(!(k>=0&&k<=n)) return err(`Los «sí» deben estar entre 0 y ${fmtInt(n)}.`); if(!(m>0)) return err('El margen aceptable debe ser mayor que 0.');
+    const ph=k/n, lo=cpLower(n,k,a/2), hi=cpUpper(n,k,a/2), half=Math.max(ph-lo,hi-ph), color=half<=m?'green':half<=2*m?'amber':'red';
+    const u=esc(d.unit), l=esc(d.label);
+    return {color,...estHead(color),kind:'est',
+      text:`Con una confianza del ${pct0(1-a)}, entre el <b>${pct(lo)}</b> y el <b>${pct(hi)}</b> de las ${u} ${l}. Tu margen real es de <b>±${pp(half)}</b>; pediste ±${pp(m)}.`,
+      facts:[[pct(ph),`lo que has observado (${fmtInt(k)} de ${fmtInt(n)})`],[`${pct(lo)} – ${pct(hi)}`,`rango plausible (${pct0(1-a)})`],[`±${pp(half)}`,'margen de error real']],
+      frag:null, hasNull:false, margin:m,
+      sim:(mode,N=n)=>{ const s=binomSampler(N,ph); return {draw:r=>{ const e=s(r)/N; return {est:e,hit:Math.abs(e-ph)<=m+1e-12}; },fmt:pct0,lines:[{x:ph,label:'tu resultado'}],estLabel:'% observado en cada repetición'}; },
+      plan:{kind:'margin',n0:n,target:m,unitWord:d.unit,fmt:v=>'±'+pp(v),metric:N=>{ const kk=Math.round(ph*N); return Math.max(kk/N-cpLower(N,kk,a/2),cpUpper(N,kk,a/2)-kk/N); }},
+      adv:{test:this.test,formulas:[
+        ['Cada respuesta es un sí/no independiente, así que el número de «sí» sigue una binomial:',TX`X\sim\mathrm{Bin}(n,p),\qquad \hat p=\tfrac{k}{n}=${(ph).toFixed(4)}`],
+        ['Intervalo exacto de Clopper–Pearson (se invierte el test binomial en cada extremo):',TX`\underline p:\ P(X\ge k\mid \underline p)=\tfrac{\alpha}{2},\qquad \overline p:\ P(X\le k\mid \overline p)=\tfrac{\alpha}{2}`],
+        ['Margen de error:',TX`\text{margen}=\max(\hat p-\underline p,\ \overline p-\hat p)`],
+        ['Comparativa (no se usa): intervalo normal de Wald',TX`\hat p\pm z_{1-\alpha/2}\sqrt{\hat p(1-\hat p)/n}`]],
+        rows:[['n',fmtInt(n)],['k',fmtInt(k)],['p̂',pct(ph,2)],['IC exacto',`${pct(lo,2)} – ${pct(hi,2)}`],['IC normal (Wald), comparativa',`${pct(ph-qnorm(1-a/2)*Math.sqrt(ph*(1-ph)/n),2)} – ${pct(ph+qnorm(1-a/2)*Math.sqrt(ph*(1-ph)/n),2)}`]]}};
+  }
+};
+
+CASES['bin-thr']={
+  test:'Test binomial exacto',
+  lead:'Cuántas respuestas tienes, cuántas son «sí» y a partir de qué porcentaje tomarías la decisión.',
+  def:()=>({unit:'empresas',label:'no quieren externalizar',n:140,k:84,p0:50}),
+  form:[{t:'text',k:'unit',label:'¿Qué cuentas?'},{t:'text',k:'label',label:'¿Qué significa «sí»?'},{t:'row',items:[{k:'n',label:'Total de respuestas'},{k:'k',label:'Responden «sí»'},{k:'p0',label:'Umbral (%)',hint:'50 % = «la mayoría»'}]}],
+  settings:['alpha','alt'], alts:{gt:'Más que el umbral',lt:'Menos que el umbral',ne:'Distinto del umbral'}, altDef:'gt',
+  analyze(d,st){
+    const n=int(d.n),k=int(d.k),p0=numv(d.p0)/100,a=st.alpha,alt=st.alt;
+    if(!(n>=1)) return err('Necesito al menos una respuesta.'); if(!(k>=0&&k<=n)) return err(`Los «sí» deben estar entre 0 y ${fmtInt(n)}.`); if(!(p0>0&&p0<1)) return err('El umbral debe estar entre 0 % y 100 % (sin incluirlos).');
+    const ph=k/n, p=binomTest(n,k,p0,alt), sig=p<=a, eff=alt==='gt'?1:alt==='lt'?-1:(ph>=p0?1:-1), cap=Math.min(n,400);
+    let frag=null;
+    for(let i=1;i<=cap;i++){ const kk=sig?k-eff*i:k+eff*i; if(kk<0||kk>n) break; const q=binomTest(n,kk,p0,alt); if(sig?q>a:q<=a){ frag=i; break; } }
+    const color=colorFrag(sig,frag,n), u=esc(d.unit), l=esc(d.label);
+    let bound; if(alt==='gt') bound=[`≥ ${pct(cpLower(n,k,a))}`,`con un ${pct0(1-a)} de confianza, el porcentaje real es al menos este`];
+    else if(alt==='lt') bound=[`≤ ${pct(cpUpper(n,k,a))}`,`con un ${pct0(1-a)} de confianza, el porcentaje real es como mucho este`];
+    else bound=[`${pct(cpLower(n,k,a/2))} – ${pct(cpUpper(n,k,a/2))}`,`rango plausible (${pct0(1-a)})`];
+    const text=sig
+      ?`Con ${fmtInt(k)} de ${fmtInt(n)} (${pct(ph)}), puedes afirmar que el porcentaje de ${u} que ${l} es <b>${altWord(alt)} ${pct0(p0)}</b>. Si en realidad no lo fuera, un resultado así solo saldría por azar un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`Con ${fmtInt(k)} de ${fmtInt(n)} (${pct(ph)}) no puedes descartar que el porcentaje real sea ${altOpp(alt)} ${pct0(p0)}: un resultado como el tuyo saldría por azar un <b>${fmtP(p)}</b> de las veces, más que tu límite del ${pct0(a)}.`;
+    let fh; const from=(sig?eff===1:eff===-1)?'yes':'no';
+    if(sig) fh=frag==null?`Ni cambiando ${fmtInt(cap)} respuestas dejaría de cumplirse: resultado muy robusto.`:`Bastaría con que <b>${fmtInt(frag)}</b> ${u} cambiaran su respuesta para que ya no pudieras afirmarlo. ${color==='green'?'Es un margen cómodo.':'Es un resultado frágil.'}`;
+    else fh=frag==null?`Ni cambiando ${fmtInt(cap)} respuestas llegarías a poder afirmarlo.`:`Te faltarían <b>${fmtInt(frag)}</b> respuestas en el otro sentido (de ${fmtInt(n)}) para poder afirmarlo.`;
+    const c0=critBin(n,p0,a,alt);
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[pct(ph),`observado (${fmtInt(k)} de ${fmtInt(n)})`],bound,[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      frag:fragBox(color,fh,people(n,k,from,frag)), hasNull:true,
+      sim:(mode,N=n)=>{ const s=binomSampler(N,mode==='null'?p0:ph), c=critBin(N,p0,a,alt); return {draw:r=>{ const x=s(r); return {est:x/N,hit:x<=c.kL||x>=c.kU}; },fmt:pct0,lines:[{x:ph,label:'tu resultado'},{x:p0,label:'umbral',dash:1}],estLabel:'% observado en cada repetición'}; },
+      plan:{kind:'power',n0:n,unitWord:d.unit,metric:N=>powerBin(N,p0,ph,a,alt),feasible:alt==='ne'?ph!==p0:(alt==='gt'?ph>p0:ph<p0)},
+      adv:{test:this.test,formulas:[
+        ['Modelo y p-valor exacto:',TX`X\sim\mathrm{Bin}(n,p),\quad H_0:\ p=p_0,\quad p\text{-valor}=${alt==='gt'?TX`P(X\ge k\mid p_0)`:alt==='lt'?TX`P(X\le k\mid p_0)`:TX`2\min\{P(X\ge k\mid p_0),P(X\le k\mid p_0)\}`}`],
+        ['Región de rechazo exacta con tamaño ≤ α:',TX`k^{*}=\min\{k:\ P(X\ge k\mid p_0)\le \alpha\}`],
+        ['Fragilidad: nº mínimo de respuestas que hay que cambiar para invertir la conclusión:',TX`F=\min\{i:\ \mathbb 1[p(k\mp i)\le\alpha]\neq \mathbb 1[p(k)\le\alpha]\}`],
+        ['Potencia exacta con N datos (si la verdad es p̂):',TX`\text{Pot}(N)=\sum_{k\in R_N}\binom{N}{k}\hat p^{k}(1-\hat p)^{N-k}`]],
+        rows:[['Estadístico k',fmtInt(k)],['p-valor exacto',fmtP(p)],['Región de rechazo',[c0.kL>=0?`k ≤ ${c0.kL}`:'',c0.kU<=n?`k ≥ ${c0.kU}`:''].filter(Boolean).join(' o ')||'vacía'],['α real del test (tamaño exacto)',pct(c0.size,3)],['Fragilidad',frag==null?'—':fmtInt(frag)],['p-valor aprox. normal (comparativa)',fmtP(tP((ph-p0)/Math.sqrt(p0*(1-p0)/n),1e9,alt))]]}};
+  }
+};
+
+CASES['bin-two']={
+  test:'Test exacto de Fisher',
+  lead:'Para cada grupo: cuántas respuestas tienes y cuántas son «sí».',
+  def:()=>({unit:'empresas',label:'no quieren externalizar',nameA:'España',nameB:'Portugal',nA:140,kA:84,nB:110,kB:52}),
+  form:[{t:'text',k:'unit',label:'¿Qué cuentas?'},{t:'text',k:'label',label:'¿Qué significa «sí»?'},{t:'group',nk:'nameA',items:[{k:'nA',label:'Total'},{k:'kA',label:'Responden «sí»'}]},{t:'group',nk:'nameB',items:[{k:'nB',label:'Total'},{k:'kB',label:'Responden «sí»'}]}],
+  settings:['alpha','alt'], alts:{ne:'Distintos',gt:'B mayor que A',lt:'B menor que A'}, altDef:'ne',
+  analyze(d,st){
+    const nA=int(d.nA),kA=int(d.kA),nB=int(d.nB),kB=int(d.kB),a=st.alpha,alt=st.alt, A=esc(d.nameA||'A'), B=esc(d.nameB||'B');
+    if(!(nA>=1&&nB>=1)) return err('Cada grupo necesita al menos una respuesta.'); if(!(kA>=0&&kA<=nA&&kB>=0&&kB<=nB)) return err('Los «sí» de cada grupo deben estar entre 0 y su total.');
+    if(nA+nB>30000) return err('Demasiados datos para el cálculo exacto en el navegador (máx. 30.000).');
+    const pA=kA/nA,pB=kB/nB,p=fisherP(nA,kA,nB,kB,alt),sig=p<=a,eff=alt==='gt'?1:alt==='lt'?-1:(pB>=pA?1:-1);
+    let frag=null,xa=kA,xb=kB; const cap=300;
+    for(let i=1;i<=cap;i++){ const opts=[]; const dir=sig?-eff:eff;
+      if(xb+dir>=0&&xb+dir<=nB) opts.push([xa,xb+dir]); if(xa-dir>=0&&xa-dir<=nA) opts.push([xa-dir,xb]);
+      if(!opts.length) break; let best=null,bp=sig?-1:2; for(const o of opts){ const q=fisherP(nA,o[0],nB,o[1],alt); if(sig?q>bp:q<bp){ bp=q; best=o; } }
+      [xa,xb]=best; if(sig?bp>a:bp<=a){ frag=i; break; } }
+    const color=colorFrag(sig,frag,nA+nB), u=esc(d.unit), l=esc(d.label), diff=pB-pA;
+    const cmp=alt==='ne'?'distinto':alt==='gt'?'mayor':'menor';
+    const text=sig?`El porcentaje de ${u} que ${l} es <b>${cmp} en ${B} (${pct(pB)}) que en ${A} (${pct(pA)})</b>. Si no hubiera diferencia real, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`${B} (${pct(pB)}) y ${A} (${pct(pA)}) no son distinguibles con estos datos: una diferencia así saldría por azar un <b>${fmtP(p)}</b> de las veces, más que tu límite del ${pct0(a)}.`;
+    const fh=sig?(frag==null?'Ni cambiando 300 respuestas dejaría de cumplirse: muy robusto.':`Bastaría con que <b>${fmtInt(frag)}</b> ${u} cambiaran su respuesta para que la diferencia dejara de ser significativa. ${color==='green'?'Margen cómodo.':'Resultado frágil.'}`)
+      :(frag==null?'Ni cambiando 300 respuestas llegarías a una diferencia significativa.':`Te faltarían <b>${fmtInt(frag)}</b> respuestas en el sentido de la diferencia para poder afirmarlo.`);
+    const pool=(kA+kB)/(nA+nB);
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[`${pct(pA)} vs ${pct(pB)}`,`${A} vs ${B}`],[`${diff>=0?'+':''}${pp(diff)}`,'diferencia observada (B − A)'],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      frag:fragBox(color,fh),hasNull:true,
+      sim:(mode,N)=>{ const NA=N||nA, NB=N||nB, sA=binomSampler(NA,mode==='null'?pool:pA), sB=binomSampler(NB,mode==='null'?pool:pB);
+        return {draw:r=>{ const x=sA(r),y=sB(r); return {est:y/NB-x/NA,hit:fisherP(NA,x,NB,y,alt)<=a}; },fmt:v=>(v>=0?'+':'')+pp(v),lines:[{x:diff,label:'tu diferencia'},{x:0,label:'sin diferencia',dash:1}],estLabel:'diferencia B − A en cada repetición'}; },
+      plan:{kind:'power',n0:Math.round((nA+nB)/2),unitWord:`${d.unit} por grupo`,perGroup:true,metric:N=>N<=400?powerFisher(N,pA,pB,a,alt):null,feasible:alt==='ne'?pA!==pB:(alt==='gt'?pB>pA:pB<pA),maxN:5000},
+      adv:{test:this.test,formulas:[
+        ['Condicionando al total de «sí» t, bajo H₀ los «sí» de B siguen una hipergeométrica (no depende del porcentaje común):',TX`P(X_B=j\mid t)=\frac{\binom{n_B}{j}\binom{n_A}{t-j}}{\binom{n_A+n_B}{t}}`],
+        ['p-valor exacto:',alt==='gt'?TX`p=\sum_{j\ge k_B}P(X_B=j\mid t)`:alt==='lt'?TX`p=\sum_{j\le k_B}P(X_B=j\mid t)`:TX`p=2\min\Big\{\sum_{j\ge k_B},\ \sum_{j\le k_B}\Big\}`],
+        ['Potencia exacta con n por grupo (suma sobre todas las tablas posibles):',TX`\text{Pot}(n)=\sum_{t}\sum_{j\in R(t)}\binom{n}{t-j}p_A^{t-j}(1-p_A)^{n-t+j}\binom{n}{j}p_B^{j}(1-p_B)^{n-j}`]],
+        rows:[['p-valor exacto (Fisher)',fmtP(p)],['Fragilidad (Walsh)',frag==null?'—':fmtInt(frag)],['IC ' +A,`${pct(cpLower(nA,kA,a/2))} – ${pct(cpUpper(nA,kA,a/2))}`],['IC '+B,`${pct(cpLower(nB,kB,a/2))} – ${pct(cpUpper(nB,kB,a/2))}`],['p-valor z aprox. (comparativa)',fmtP(tP(diff/Math.sqrt(pool*(1-pool)*(1/nA+1/nB)||1e-9),1e9,alt))]]}};
+  }
+};
+
+CASES['bin-pair']={
+  test:'Test exacto de McNemar',
+  lead:'Cruza la respuesta de cada persona antes y después. Solo cuentan quienes cambiaron de opinión.',
+  def:()=>({unit:'empresas',label:'quieren externalizar',a:40,b:12,c:28,dd:40}),
+  form:[{t:'text',k:'unit',label:'¿Qué cuentas?'},{t:'text',k:'label',label:'¿Qué significa «sí»?'},{t:'pair22'}],
+  settings:['alpha','alt'], alts:{ne:'Ha cambiado',gt:'Ha aumentado el «sí»',lt:'Ha bajado el «sí»'}, altDef:'ne',
+  analyze(d,st){
+    const C={a:int(d.a),b:int(d.b),c:int(d.c),dd:int(d.dd)}, a=st.alpha, alt=st.alt;
+    if(Object.values(C).some(v=>!(v>=0))) return err('Todas las casillas deben ser números ≥ 0.');
+    const n=C.a+C.b+C.c+C.dd; if(n<1) return err('Necesito al menos un par.');
+    const m=C.b+C.c, pv=X=>X.b+X.c>0?binomTest(X.b+X.c,X.c,0.5,alt):1, p=pv(C), sig=p<=a, eff=alt==='gt'?1:alt==='lt'?-1:(C.c>=C.b?1:-1);
+    const red=eff===1?[['c','dd'],['a','b']]:[['b','a'],['dd','c']], inc=eff===1?[['dd','c'],['b','a']]:[['a','b'],['c','dd']];
+    let frag=null,X={...C};
+    for(let i=1;i<=Math.min(n,400);i++){ let best=null,bp=sig?-1:2;
+      for(const [f,t] of (sig?red:inc)){ if(X[f]<=0) continue; const Y={...X}; Y[f]--; Y[t]++; const q=pv(Y); if(sig?q>bp:q<bp){ bp=q; best=Y; } }
+      if(!best) break; X=best; if(sig?bp>a:bp<=a){ frag=i; break; } }
+    const color=colorFrag(sig,frag,n), u=esc(d.unit), l=esc(d.label), before=(C.a+C.b)/n, after=(C.a+C.c)/n, ch=after-before;
+    const cmp=alt==='ne'?'ha cambiado':alt==='gt'?'ha aumentado':'ha bajado';
+    const text=sig?`El porcentaje de ${u} que ${l} <b>${cmp}</b>: del ${pct(before)} al ${pct(after)}. Si en realidad nada hubiera cambiado, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`Del ${pct(before)} al ${pct(after)}: con estos datos no puedes afirmar que ${cmp}. Un cambio así saldría por azar un <b>${fmtP(p)}</b> de las veces.`;
+    const fh=sig?(frag==null?'Resultado muy robusto.':`Bastaría con que <b>${fmtInt(frag)}</b> ${u} hubieran respondido distinto «después» para que el cambio dejara de ser significativo. ${color==='green'?'Margen cómodo.':'Resultado frágil.'}`)
+      :(frag==null?'Ni con muchos cambios llegarías a poder afirmarlo.':`Te faltarían <b>${fmtInt(frag)}</b> ${u} cambiando en ese sentido para poder afirmarlo.`);
+    const pid=m/n, th=m>0?C.c/m:0.5;
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[`${pct(before)} → ${pct(after)}`,'antes → después'],[`${fmtInt(C.c)} vs ${fmtInt(C.b)}`,'cambian a «sí» vs cambian a «no»'],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      frag:fragBox(color,fh),hasNull:true,
+      sim:(mode,N=n)=>{ const sm=binomSampler(N,pid), cache=new Map(), crit=new Map(), t=mode==='null'?0.5:th;
+        const get=(mm)=>{ if(!cache.has(mm)){ cache.set(mm,binomSampler(mm,t)); crit.set(mm,critBin(mm,0.5,a,alt)); } return [cache.get(mm),crit.get(mm)]; };
+        return {draw:r=>{ const mm=sm(r); if(mm===0) return {est:0,hit:false}; const [s,c]=get(mm), x=s(r); return {est:(2*x-mm)/N,hit:x<=c.kL||x>=c.kU}; },fmt:v=>(v>=0?'+':'')+pp(v),lines:[{x:ch,label:'tu cambio'},{x:0,label:'sin cambio',dash:1}],estLabel:'cambio en el % de «sí»'}; },
+      plan:{kind:'power',n0:n,unitWord:d.unit,metric:N=>powerCond(N,pid,th,0.5,a,alt),feasible:m>0&&(alt==='ne'?C.b!==C.c:(alt==='gt'?C.c>C.b:C.c<C.b))},
+      adv:{test:this.test,formulas:[
+        ['Solo informan los pares discordantes (b = sí→no, c = no→sí). Bajo H₀ cada cambio es igual de probable en los dos sentidos:',TX`C\mid (B+C=m)\ \sim\ \mathrm{Bin}(m,\tfrac12)`],
+        ['p-valor exacto:',alt==='gt'?TX`p=P(C\ge c\mid m)`:alt==='lt'?TX`p=P(C\le c\mid m)`:TX`p=2\min\{P(C\ge c),P(C\le c)\}`],
+        ['Potencia exacta con N pares (π = proporción que cambia, θ = c/m):',TX`\text{Pot}(N)=\sum_{m}\binom{N}{m}\pi^m(1-\pi)^{N-m}\,P(\text{rechazo}\mid m,\theta)`]],
+        rows:[['b (sí → no)',fmtInt(C.b)],['c (no → sí)',fmtInt(C.c)],['p-valor exacto',fmtP(p)],['Fragilidad',frag==null?'—':fmtInt(frag)],['p-valor χ² de McNemar (comparativa)',fmtP(m?chisqUpper((C.b-C.c)**2/m,1):1)]]}};
+  }
+};
+
+/* ---------------- Números ---------------- */
+const NUM_DEF={unit:'k€',label:'gasto mensual en TI'};
+const RAW_A='9,8 12,4 15,1 11,0 8,7 14,3 13,9 10,2 16,8 12,0 9,1 11,7 13,4 18,2 10,9 12,6 7,9 14,8 11,3 13,1 10,4 15,6 12,9 9,6 11,8 14,0 12,2 16,1 10,7 13,6';
+const RAW_B='13,9 15,2 12,8 17,4 14,1 16,6 11,9 15,8 18,3 13,5 14,7 16,0 12,4 19,1 15,3 14,4 13,0 17,0 15,9 12,7 16,4 14,9 13,8 15,5';
+const numObj=(raw)=>({method:'raw',raw,mean:12.4,sd:2.4,n:30,min:8,max:17});
+function tIntervalHalf(s,n,a){ return qt(1-a/2,n-1)*s/Math.sqrt(n); }
+function drawSummary(m,s,N,rng,norm){ const mm=m+s/Math.sqrt(N)*norm(); const v=s*s*2*rgamma((N-1)/2,rng,norm)/(N-1); return [mm,Math.sqrt(v)]; }
+function resampleStats(xs,N,rng,shift=0){ let s=0,s2=0; const n=xs.length; for(let i=0;i<N;i++){ const v=xs[Math.floor(rng()*n)]+shift; s+=v; s2+=v*v; } const m=s/N; return [m,Math.sqrt(Math.max(0,(s2-N*m*m)/(N-1)))]; }
+
+CASES['num-est']={
+  test:'Bootstrap (datos) o intervalo t (resumen)',
+  lead:'Pega tus datos o, si no los tienes, un resumen.',
+  def:()=>({...NUM_DEF,x:numObj(RAW_A),margin:1}),
+  form:[{t:'text',k:'label',label:'¿Qué mides?'},{t:'text',k:'unit',label:'Unidad',hint:'Ej.: k€, horas, puntos'},{t:'num',k:'x'}],
+  settings:['alpha','margin'], marginUnit:d=>d.unit, marginHint:'Cuánto error aceptas en la media, en las unidades de tu dato.',
+  analyze(d,st){
+    const g=getNum(d.x); if(g.error) return err(g.error); const a=st.alpha, mg=numv(d.margin); if(!(mg>0)) return err('El margen aceptable debe ser mayor que 0.');
+    const u=esc(d.unit), l=esc(d.label); let lo,hi,method;
+    if(g.raw){ const b=bootMean(g.xs,10000,SEED); lo=quantile(b,a/2); hi=quantile(b,1-a/2); method='bootstrap percentil (10.000 remuestreos)'; }
+    else { const h=tIntervalHalf(g.s,g.n,a); lo=g.m-h; hi=g.m+h; method='intervalo t de Student'; }
+    const half=Math.max(g.m-lo,hi-g.m), color=half<=mg?'green':half<=2*mg?'amber':'red';
+    const norm0=null;
+    return {color,...estHead(color),kind:'est',
+      text:`Con una confianza del ${pct0(1-a)}, el ${l} medio está entre <b>${fnum(lo)} ${u}</b> y <b>${fnum(hi)} ${u}</b>. Tu margen real es de <b>±${fnum(half)} ${u}</b>; pediste ±${fnum(mg)} ${u}.${g.fromRange?' <i>(Dispersión estimada a partir del rango: tómalo como orientativo.)</i>':''}`,
+      facts:[[`${fnum(g.m)} ${u}`,`media observada (n = ${fmtInt(g.n)})`],[`${fnum(lo)} – ${fnum(hi)}`,`rango plausible (${pct0(1-a)})`],[`±${fnum(half)}`,`margen de error (${u})`]],
+      frag:null,hasNull:false,margin:mg,
+      sim:(mode,N=g.n)=>{ let draw; if(g.raw) draw=r=>{ const [m]=resampleStats(g.xs,N,r); return {est:m,hit:Math.abs(m-g.m)<=mg}; };
+        else { let nm=null; draw=r=>{ nm=nm||makeNorm(r); const m=g.m+g.s/Math.sqrt(N)*nm(); return {est:m,hit:Math.abs(m-g.m)<=mg}; }; }
+        return {draw,fmt:v=>fnum(v),lines:[{x:g.m,label:'tu media'}],estLabel:`media en cada repetición (${d.unit})`}; },
+      plan:{kind:'margin',n0:g.n,target:mg,unitWord:'datos',fmt:v=>'±'+fnum(v)+' '+d.unit,metric:N=>tIntervalHalf(g.s,Math.max(2,N),a),minN:3},
+      adv:{test:(g.raw?'Bootstrap percentil':'Intervalo t de Student'),formulas:[
+        g.raw?['Bootstrap: se remuestrea tu muestra con reemplazo 10.000 veces y se toman los percentiles de la media:',TX`\bar x^{*}_{(b)}=\tfrac1n\textstyle\sum_i x^{*}_{i},\qquad IC=[\bar x^{*}_{(\alpha/2)},\ \bar x^{*}_{(1-\alpha/2)}]`]
+             :['Intervalo t (exacto si los datos son aproximadamente normales):',TX`\bar x\pm t_{1-\alpha/2,\,n-1}\,\frac{s}{\sqrt n}`],
+        ['Tamaño para un margen objetivo m:',TX`n^{*}=\min\Big\{n:\ t_{1-\alpha/2,\,n-1}\tfrac{s}{\sqrt n}\le m\Big\}`]],
+        rows:[['n',fmtInt(g.n)],['Media',fnum(g.m,3)],['Desviación típica',fnum(g.s,3)+(g.fromRange?' (≈ rango/4)':'')],['Método',method],['IC t (comparativa)',`${fnum(g.m-tIntervalHalf(g.s,g.n,a),3)} – ${fnum(g.m+tIntervalHalf(g.s,g.n,a),3)}`]]}};
+  }
+};
+
+function numOneSample(d,st,g,mu0,ctx){
+  const a=st.alpha, alt=st.alt, u=esc(d.unit), l=esc(d.label);
+  let p,t=null,method;
+  if(g.raw){ p=signFlip(g.xs.map(v=>v-mu0),10000,SEED,alt); method='permutación de signos (10.000)'; }
+  else { t=tOne(g.m,g.s,g.n,mu0,alt); p=t.p; method='t de Student'; }
+  const sig=p<=a; let frag=null,color,fr;
+  if(g.raw&&sig){ const eff=alt==='gt'?1:alt==='lt'?-1:(g.m>=mu0?1:-1), sorted=[...g.xs].sort((x,y)=>eff*(y-x)); const cap=Math.min(30,g.n-3);
+    for(let i=1;i<=cap;i++){ const q=signFlip(sorted.slice(i).map(v=>v-mu0),2000,SEED,alt); if(q>a){ frag=i; break; } }
+    color=colorFrag(true,frag,g.n);
+    fr=fragBox(color,frag==null?`Aunque quitaras los ${cap} valores más favorables seguiría cumpliéndose: muy robusto.`:`Si quitaras los <b>${fmtInt(frag)}</b> ${frag===1?'valor más favorable':'valores más favorables'}, ya no podrías afirmarlo. ${color==='green'?'Margen cómodo.':'Depende de muy pocos datos: resultado frágil.'}`);
+  } else { color=colorP(p,a); fr=pFallbackFrag(p,a,sig); }
+  const text=sig?`${ctx.sigText(alt,u,l)} Si en realidad no fuera así, un resultado como el tuyo solo saldría por azar un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+                 :`${ctx.nsText(alt,u,l)} Un resultado como el tuyo saldría por azar un <b>${fmtP(p)}</b> de las veces, más que tu límite del ${pct0(a)}.`;
+  let bound;
+  if(g.raw){ const b=bootMean(g.xs,10000,SEED+1); bound=alt==='gt'?[`≥ ${fnum(quantile(b,a))}`,`con un ${pct0(1-a)} de confianza, la media real es al menos esto`]:alt==='lt'?[`≤ ${fnum(quantile(b,1-a))}`,`con un ${pct0(1-a)} de confianza, la media real es como mucho esto`]:[`${fnum(quantile(b,a/2))} – ${fnum(quantile(b,1-a/2))}`,`rango plausible (${pct0(1-a)})`]; }
+  else { const se=g.s/Math.sqrt(g.n); bound=alt==='gt'?[`≥ ${fnum(g.m-qt(1-a,g.n-1)*se)}`,`con un ${pct0(1-a)} de confianza, la media real es al menos esto`]:alt==='lt'?[`≤ ${fnum(g.m+qt(1-a,g.n-1)*se)}`,`con un ${pct0(1-a)} de confianza, la media real es como mucho esto`]:[`${fnum(g.m-qt(1-a/2,g.n-1)*se)} – ${fnum(g.m+qt(1-a/2,g.n-1)*se)}`,`rango plausible (${pct0(1-a)})`]; }
+  const sim=(mode,N=g.n)=>{ let nm=null; const shift=mode==='null'?mu0-g.m:0;
+    return {draw:r=>{ let m,s; if(g.raw) [m,s]=resampleStats(g.xs,N,r,shift); else { nm=nm||makeNorm(r); [m,s]=drawSummary(g.m+shift,g.s,N,r,nm); } return {est:m,hit:tOne(m,s,N,mu0,alt).p<=a}; },
+      fmt:v=>fnum(v),lines:[{x:g.m,label:ctx.obsLabel},{x:mu0,label:ctx.refLabel,dash:1}],estLabel:ctx.estLabel}; };
+  const tt=tOne(g.m,g.s,g.n,mu0,alt);
+  return {color,sig,...testHead(color,sig),kind:'test',text,
+    facts:[[`${fnum(g.m)} ${u}`,ctx.obsFact(g.n)],bound,[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+    frag:fr,hasNull:true,sim,
+    plan:{kind:'power',n0:g.n,unitWord:ctx.unitWord,metric:null,feasible:alt==='ne'?g.m!==mu0:(alt==='gt'?g.m>mu0:g.m<mu0),minN:3},
+    adv:{test:g.raw?(ctx.paired?'Permutación de signos sobre las diferencias':'Permutación de signos'):(ctx.paired?'t de Student pareado':'t de Student'),formulas:[
+      g.raw?['Permutación de signos: bajo H₀ (distribución simétrica alrededor de μ₀), cada desviación puede cambiar de signo. Se simulan 10.000 asignaciones:',TX`p=\frac{1+\#\{b:\ \bar d^{*}_b\ ${alt==='gt'?'\\ge':alt==='lt'?'\\le':'\\ \\text{tan extremo como}\\ '}\ \bar d\}}{B+1},\quad d_i=x_i-\mu_0`]
+           :['Test t (exacto si los datos son aproximadamente normales):',TX`t=\frac{\bar x-\mu_0}{s/\sqrt n}\sim t_{n-1}`],
+      ['Fragilidad: nº de valores más favorables que hay que quitar para que deje de ser significativo.',TX`F=\min\{i:\ p(x\setminus\{x_{(1)},\dots,x_{(i)}\})>\alpha\}`],
+      ['Potencia con N datos: Monte Carlo, remuestreando tus datos (o bajo normalidad si das un resumen) y aplicando el test t en cada repetición.',TX`\widehat{\text{Pot}}(N)=\tfrac1R\textstyle\sum_r \mathbb 1[p_r\le\alpha]`]],
+      rows:[['n',fmtInt(g.n)],['Media',fnum(g.m,3)],['Desv. típica',fnum(g.s,3)],['Método',method],['p-valor',fmtP(p)],['p-valor t (comparativa)',fmtP(tt.p)],['t',fnum(tt.t,3)]]}};
+}
+CASES['num-thr']={
+  test:'Permutación de signos / t de Student',
+  lead:'Pega tus datos (o un resumen) y el valor de referencia.',
+  def:()=>({...NUM_DEF,x:numObj(RAW_A),mu0:11}),
+  form:[{t:'text',k:'label',label:'¿Qué mides?'},{t:'text',k:'unit',label:'Unidad'},{t:'row',items:[{k:'mu0',label:'Valor de referencia',hint:'El umbral que quieres superar',float:1}]},{t:'num',k:'x'}],
+  settings:['alpha','alt'], alts:{gt:'Mayor que la referencia',lt:'Menor que la referencia',ne:'Distinto de la referencia'}, altDef:'gt',
+  analyze(d,st){ const g=getNum(d.x); if(g.error) return err(g.error); const mu0=numv(d.mu0); if(!isFinite(mu0)) return err('Falta el valor de referencia.');
+    return numOneSample(d,st,g,mu0,{unitWord:'datos',obsLabel:'tu media',refLabel:'referencia',estLabel:`media en cada repetición (${d.unit})`,obsFact:n=>`media observada (n = ${fmtInt(n)})`,
+      sigText:(alt,u,l)=>`Puedes afirmar que el ${l} medio es <b>${altWord(alt)} ${fnum(mu0)} ${u}</b>.`,
+      nsText:(alt,u,l)=>`No puedes descartar que el ${l} medio sea ${altOpp(alt)} ${fnum(mu0)} ${u}.`}); }
+};
+CASES['num-pair']={
+  test:'Permutación de signos / t pareado',
+  lead:'Cada fila es el mismo sujeto medido antes y después. Pega las dos columnas o un resumen de las diferencias.',
+  def:()=>({...NUM_DEF,x:{method:'raw',before:'12,1 9,8 14,5 11,2 13,0 10,4 15,2 12,7 9,9 13,8 11,5 12,9 14,1 10,8 13,3 12,0',after:'11,4 9,9 13,2 10,5 12,8 9,6 14,1 12,9 9,1 12,7 11,0 12,1 13,5 10,9 12,4 11,2',mean:-0.6,sd:0.6,n:16}}),
+  form:[{t:'text',k:'label',label:'¿Qué mides?'},{t:'text',k:'unit',label:'Unidad'},{t:'numPair',k:'x'}],
+  settings:['alpha','alt'], alts:{ne:'Ha cambiado',gt:'Ha aumentado',lt:'Ha bajado'}, altDef:'ne',
+  analyze(d,st){ const o=d.x; let g;
+    if(o.method==='raw'){ const b=parseNums(o.before), f=parseNums(o.after); if(b.length!==f.length) return err(`Las dos columnas deben tener el mismo número de valores (antes: ${b.length}, después: ${f.length}).`); if(b.length<3) return err('Pega al menos 3 pares.');
+      const xs=f.map((v,i)=>v-b[i]); const s=sdev(xs); if(!(s>0)) return err('Todas las diferencias son iguales.'); g={raw:true,xs,n:xs.length,m:mean(xs),s}; }
+    else { g=getNum({method:'sum',mean:o.mean,sd:o.sd,n:o.n}); if(g.error) return err(g.error); }
+    return numOneSample(d,st,g,0,{paired:true,unitWord:'pares',obsLabel:'tu cambio medio',refLabel:'sin cambio',estLabel:`cambio medio en cada repetición (${d.unit})`,obsFact:n=>`cambio medio (después − antes, ${fmtInt(n)} pares)`,
+      sigText:(alt,u,l)=>`Puedes afirmar que el ${l} <b>${alt==='gt'?'ha aumentado':alt==='lt'?'ha bajado':'ha cambiado'}</b> (${g.m>=0?'+':''}${fnum(g.m)} ${u} de media).`,
+      nsText:(alt,u,l)=>`Con estos datos no puedes afirmar que el ${l} ${alt==='gt'?'haya aumentado':alt==='lt'?'haya bajado':'haya cambiado'} (${g.m>=0?'+':''}${fnum(g.m)} ${u} de media).`}); }
+};
+CASES['num-two']={
+  test:'Permutación / t de Welch',
+  lead:'Pega los datos de cada grupo o, si no los tienes, un resumen.',
+  def:()=>({...NUM_DEF,nameA:'España',nameB:'Portugal',xA:numObj(RAW_A),xB:{...numObj(RAW_B),mean:15,n:24}}),
+  form:[{t:'text',k:'label',label:'¿Qué mides?'},{t:'text',k:'unit',label:'Unidad'},{t:'group',nk:'nameA',items:[{t:'num',k:'xA'}]},{t:'group',nk:'nameB',items:[{t:'num',k:'xB'}]}],
+  settings:['alpha','alt'], alts:{ne:'Distintos',gt:'B mayor que A',lt:'B menor que A'}, altDef:'ne',
+  analyze(d,st){
+    const A=esc(d.nameA||'A'), B=esc(d.nameB||'B'), gA=getNum(d.xA,d.nameA), gB=getNum(d.xB,d.nameB); if(gA.error) return err(gA.error); if(gB.error) return err(gB.error);
+    const a=st.alpha, alt=st.alt, u=esc(d.unit), l=esc(d.label), raw=gA.raw&&gB.raw, diff=gB.m-gA.m, w=welch(gA.m,gA.s,gA.n,gB.m,gB.s,gB.n,alt);
+    const p=raw?perm2(gA.xs,gB.xs,10000,SEED,alt):w.p, sig=p<=a; let frag=null,color,fr;
+    if(raw&&sig){ const eff=alt==='gt'?1:alt==='lt'?-1:(diff>=0?1:-1); let xa=[...gA.xs].sort((x,y)=>x-y), xb=[...gB.xs].sort((x,y)=>x-y); const cap=Math.min(20,gA.n+gB.n-6);
+      for(let i=1;i<=cap;i++){ const opts=[]; // quitar el valor que más empuja el efecto
+        if(eff===1){ if(xb.length>3) opts.push([xa,xb.slice(0,-1)]); if(xa.length>3) opts.push([xa.slice(1),xb]); }
+        else { if(xb.length>3) opts.push([xa,xb.slice(1)]); if(xa.length>3) opts.push([xa.slice(0,-1),xb]); }
+        if(!opts.length) break; let best=null,bp=-1; for(const o of opts){ const q=perm2(o[0],o[1],1000,SEED,alt); if(q>bp){ bp=q; best=o; } }
+        [xa,xb]=best; if(bp>a){ frag=i; break; } }
+      color=colorFrag(true,frag,gA.n+gB.n);
+      fr=fragBox(color,frag==null?'Aunque quitaras bastantes valores extremos seguiría cumpliéndose: muy robusto.':`Si quitaras los <b>${fmtInt(frag)}</b> valores extremos que más empujan la diferencia, dejaría de ser significativa. ${color==='green'?'Margen cómodo.':'Depende de muy pocos datos: resultado frágil.'}`);
+    } else { color=colorP(p,a); fr=pFallbackFrag(p,a,sig); }
+    const cmp=alt==='ne'?'distinto':alt==='gt'?'mayor':'menor';
+    const text=sig?`El ${l} medio es <b>${cmp} en ${B} (${fnum(gB.m)} ${u}) que en ${A} (${fnum(gA.m)} ${u})</b>. Si no hubiera diferencia real, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`${B} (${fnum(gB.m)} ${u}) y ${A} (${fnum(gA.m)} ${u}) no son distinguibles con estos datos: una diferencia así saldría por azar un <b>${fmtP(p)}</b> de las veces.`;
+    let lo,hi; if(raw){ const b=bootDiff(gA.xs,gB.xs,10000,SEED); lo=quantile(b,a/2); hi=quantile(b,1-a/2); } else { const h=qt(1-a/2,w.df)*w.se; lo=diff-h; hi=diff+h; }
+    const mp=(gA.m*gA.n+gB.m*gB.n)/(gA.n+gB.n);
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[`${fnum(gA.m)} vs ${fnum(gB.m)}`,`media ${A} vs ${B} (${u})`],[`${diff>=0?'+':''}${fnum(diff)} ${u}`,`diferencia (B − A); rango plausible ${fnum(lo)} a ${fnum(hi)}`],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      frag:fr,hasNull:true,
+      sim:(mode,N)=>{ const NA=N||gA.n, NB=N||gB.n; let nm=null; const shA=mode==='null'?mp-gA.m:0, shB=mode==='null'?mp-gB.m:0;
+        return {draw:r=>{ let ma,sa,mb,sb; if(raw){ [ma,sa]=resampleStats(gA.xs,NA,r,shA); [mb,sb]=resampleStats(gB.xs,NB,r,shB); } else { nm=nm||makeNorm(r); [ma,sa]=drawSummary(gA.m+shA,gA.s,NA,r,nm); [mb,sb]=drawSummary(gB.m+shB,gB.s,NB,r,nm); }
+          return {est:mb-ma,hit:welch(ma,sa,NA,mb,sb,NB,alt).p<=a}; },fmt:v=>(v>=0?'+':'')+fnum(v),lines:[{x:diff,label:'tu diferencia'},{x:0,label:'sin diferencia',dash:1}],estLabel:`diferencia B − A (${d.unit})`}; },
+      plan:{kind:'power',n0:Math.round((gA.n+gB.n)/2),unitWord:'datos por grupo',perGroup:true,metric:null,feasible:alt==='ne'?diff!==0:(alt==='gt'?diff>0:diff<0),minN:3},
+      adv:{test:raw?'Test de permutación (diferencia de medias)':'t de Welch',formulas:[
+        raw?['Permutación: bajo H₀ las etiquetas de grupo son intercambiables. Se barajan 10.000 veces:',TX`p=\frac{1+\#\{b:\ |\bar x^{*}_{B}-\bar x^{*}_{A}|\ge|\bar x_B-\bar x_A|\}}{B+1}`]
+           :['t de Welch (no supone varianzas iguales):',TX`t=\frac{\bar x_B-\bar x_A}{\sqrt{s_A^2/n_A+s_B^2/n_B}},\qquad \nu=\frac{(s_A^2/n_A+s_B^2/n_B)^2}{\frac{(s_A^2/n_A)^2}{n_A-1}+\frac{(s_B^2/n_B)^2}{n_B-1}}`],
+        ['Potencia con N por grupo: Monte Carlo remuestreando cada grupo y aplicando Welch.',TX`\widehat{\text{Pot}}(N)=\tfrac1R\textstyle\sum_r \mathbb 1[p_r\le\alpha]`]],
+        rows:[['n A / n B',`${fmtInt(gA.n)} / ${fmtInt(gB.n)}`],['Media A / B',`${fnum(gA.m,3)} / ${fnum(gB.m,3)}`],['DE A / B',`${fnum(gA.s,3)} / ${fnum(gB.s,3)}`],['p-valor',fmtP(p)],['p-valor Welch (comparativa)',fmtP(w.p)],['gl de Welch',fnum(w.df,1)]]}};
+  }
+};
+
+/* ---------------- Conteos ---------------- */
+CASES['cnt-est']={
+  test:'Intervalo exacto de Poisson (Garwood)',
+  lead:'Cuántas veces ocurrió y en cuánto tiempo (o sobre cuánta exposición).',
+  def:()=>({label:'incidencias',per:'mes',k:47,T:6,margin:1.5}),
+  form:[{t:'text',k:'label',label:'¿Qué cuentas?',hint:'Ej.: incidencias, leads, visitas'},{t:'text',k:'per',label:'Unidad de tiempo (singular)',hint:'Ej.: mes, semana, día'},{t:'row',items:[{k:'k',label:'Nº de sucesos'},{k:'T',label:'Periodos observados',float:1}]}],
+  settings:['alpha','margin'], marginUnit:d=>`${d.label||'sucesos'}/${d.per||'periodo'}`, marginHint:'Cuánto error aceptas en la tasa.',
+  analyze(d,st){ const k=int(d.k),T=numv(d.T),a=st.alpha,mg=numv(d.margin);
+    if(!(k>=0)) return err('El número de sucesos debe ser ≥ 0.'); if(!(T>0)) return err('Los periodos observados deben ser > 0.'); if(!(mg>0)) return err('El margen aceptable debe ser mayor que 0.');
+    const r=k/T, lo=garLower(k,a/2)/T, hi=garUpper(k,a/2)/T, half=Math.max(r-lo,hi-r), color=half<=mg?'green':half<=2*mg?'amber':'red', L=esc(d.label), P=esc(d.per);
+    return {color,...estHead(color),kind:'est',
+      text:`Con una confianza del ${pct0(1-a)}, la tasa real está entre <b>${fnum(lo)}</b> y <b>${fnum(hi)} ${L} por ${P}</b>. Tu margen real es de <b>±${fnum(half)}</b>; pediste ±${fnum(mg)}.`,
+      facts:[[fnum(r),`${L} por ${P} (${fmtInt(k)} en ${fnum(T)} ${esc(plural(d.per))})`],[`${fnum(lo)} – ${fnum(hi)}`,`rango plausible (${pct0(1-a)})`],[`±${fnum(half)}`,'margen de error real']],
+      frag:null,hasNull:false,margin:mg,
+      sim:(mode,N=T)=>{ const s=poisSampler(r*N); return {draw:q=>{ const e=s(q)/N; return {est:e,hit:Math.abs(e-r)<=mg}; },fmt:v=>fnum(v),lines:[{x:r,label:'tu tasa'}],estLabel:`${d.label} por ${d.per} en cada repetición`}; },
+      plan:{kind:'margin',n0:T,target:mg,unitWord:plural(d.per),fmt:v=>'±'+fnum(v),metric:N=>{ const kk=Math.round(r*N); return Math.max(kk/N-garLower(kk,a/2)/N,garUpper(kk,a/2)/N-kk/N); },minN:1},
+      adv:{test:this.test,formulas:[
+        ['Los sucesos independientes a ritmo constante siguen una Poisson:',TX`K\sim\mathrm{Poisson}(\lambda T),\qquad \hat\lambda=K/T`],
+        ['Intervalo exacto de Garwood (inversión del test de Poisson):',TX`\underline\mu:\ P(K\ge k\mid\underline\mu)=\tfrac\alpha2,\quad \overline\mu:\ P(K\le k\mid\overline\mu)=\tfrac\alpha2,\quad IC=[\underline\mu/T,\ \overline\mu/T]`]],
+        rows:[['Sucesos k',fmtInt(k)],['Exposición T',fnum(T)],['Tasa',fnum(r,4)],['IC exacto',`${fnum(lo,4)} – ${fnum(hi,4)}`],['IC normal (comparativa)',`${fnum(r-qnorm(1-a/2)*Math.sqrt(k)/T,4)} – ${fnum(r+qnorm(1-a/2)*Math.sqrt(k)/T,4)}`]]}};
+  }
+};
+CASES['cnt-thr']={
+  test:'Test exacto de Poisson',
+  lead:'Cuántas veces ocurrió, en cuánto tiempo y cuál es la tasa de referencia.',
+  def:()=>({label:'incidencias',per:'mes',k:47,T:6,r0:6}),
+  form:[{t:'text',k:'label',label:'¿Qué cuentas?'},{t:'text',k:'per',label:'Unidad de tiempo (singular)'},{t:'row',items:[{k:'k',label:'Nº de sucesos'},{k:'T',label:'Periodos observados',float:1},{k:'r0',label:'Tasa de referencia',hint:'por periodo',float:1}]}],
+  settings:['alpha','alt'], alts:{gt:'Mayor que la referencia',lt:'Menor que la referencia',ne:'Distinta de la referencia'}, altDef:'gt',
+  analyze(d,st){ const k=int(d.k),T=numv(d.T),r0=numv(d.r0),a=st.alpha,alt=st.alt;
+    if(!(k>=0)) return err('El número de sucesos debe ser ≥ 0.'); if(!(T>0)) return err('Los periodos deben ser > 0.'); if(!(r0>0)) return err('La tasa de referencia debe ser > 0.');
+    const r=k/T, mu0=r0*T, p=poisTest(k,mu0,alt), sig=p<=a, eff=alt==='gt'?1:alt==='lt'?-1:(r>=r0?1:-1), L=esc(d.label), P=esc(d.per); let frag=null; const cap=Math.max(50,Math.min(2000,k+200));
+    for(let i=1;i<=cap;i++){ const kk=sig?k-eff*i:k+eff*i; if(kk<0) break; const q=poisTest(kk,mu0,alt); if(sig?q>a:q<=a){ frag=i; break; } }
+    const color=colorFrag(sig,frag,Math.max(k,1));
+    const text=sig?`Con ${fmtInt(k)} ${L} en ${fnum(T)} ${esc(plural(d.per))} (${fnum(r)} por ${P}), puedes afirmar que la tasa real es <b>${altWord(alt)} ${fnum(r0)} por ${P}</b>. Si no lo fuera, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`Con ${fnum(r)} ${L} por ${P} no puedes descartar que la tasa real sea ${altOpp(alt)} ${fnum(r0)}: un resultado así saldría por azar un <b>${fmtP(p)}</b> de las veces.`;
+    const fh=sig?(frag==null?'Resultado muy robusto.':`Con <b>${fmtInt(frag)}</b> ${L} ${eff===1?'menos':'más'} ya no podrías afirmarlo. ${color==='green'?'Margen cómodo.':'Resultado frágil.'}`)
+      :(frag==null?'Estás lejos de poder afirmarlo.':`Te faltarían <b>${fmtInt(frag)}</b> ${L} ${eff===1?'más':'menos'} para poder afirmarlo.`);
+    const bound=alt==='gt'?[`≥ ${fnum(garLower(k,a)/T)}`,`con un ${pct0(1-a)} de confianza, la tasa real es al menos esto`]:alt==='lt'?[`≤ ${fnum(garUpper(k,a)/T)}`,`con un ${pct0(1-a)} de confianza, la tasa real es como mucho esto`]:[`${fnum(garLower(k,a/2)/T)} – ${fnum(garUpper(k,a/2)/T)}`,`rango plausible (${pct0(1-a)})`];
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[fnum(r),`${L} por ${P} observadas`],bound,[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      frag:fragBox(color,fh),hasNull:true,
+      sim:(mode,N=T)=>{ const s=poisSampler((mode==='null'?r0:r)*N), c=critPois(r0*N,a,alt); return {draw:q=>{ const x=s(q); return {est:x/N,hit:x<=c.kL||x>=c.kU}; },fmt:v=>fnum(v),lines:[{x:r,label:'tu tasa'},{x:r0,label:'referencia',dash:1}],estLabel:`${d.label} por ${d.per}`}; },
+      plan:{kind:'power',n0:T,unitWord:plural(d.per),metric:N=>powerPois(r0*N,r*N,a,alt),feasible:alt==='ne'?r!==r0:(alt==='gt'?r>r0:r<r0),minN:1},
+      adv:{test:this.test,formulas:[
+        ['Modelo y p-valor exacto:',TX`K\sim\mathrm{Poisson}(\lambda T),\quad H_0:\lambda=\lambda_0,\quad p=${alt==='gt'?TX`P(K\ge k\mid\lambda_0T)`:alt==='lt'?TX`P(K\le k\mid\lambda_0T)`:TX`2\min\{P(K\ge k),P(K\le k)\}`}`],
+        ['Potencia exacta con T periodos:',TX`\text{Pot}(T)=P\big(K\in R_T\mid \hat\lambda T\big)`]],
+        rows:[['k',fmtInt(k)],['μ₀ = λ₀·T',fnum(mu0,3)],['p-valor exacto',fmtP(p)],['Fragilidad (sucesos)',frag==null?'—':fmtInt(frag)],['p-valor normal (comparativa)',fmtP(tP((k-mu0)/Math.sqrt(mu0),1e9,alt))]]}};
+  }
+};
+function cntTwo(d,st,names,paired){
+  const kA=int(d.kA),TA=numv(d.TA),kB=int(d.kB),TB=numv(d.TB),a=st.alpha,alt=st.alt,[A,B]=names.map(esc),L=esc(d.label),P=esc(d.per);
+  if(!(kA>=0&&kB>=0)) return err('Los sucesos deben ser ≥ 0.'); if(!(TA>0&&TB>0)) return err('Los periodos deben ser > 0.'); if(kA+kB<1) return err('Necesito al menos un suceso en total.');
+  const rA=kA/TA,rB=kB/TB,p=rateTest(kA,TA,kB,TB,alt),sig=p<=a,eff=alt==='gt'?1:alt==='lt'?-1:(rB>=rA?1:-1);
+  let frag=null,xa=kA,xb=kB;
+  for(let i=1;i<=400;i++){ const dir=sig?-eff:eff, opts=[]; if(xb+dir>=0) opts.push([xa,xb+dir]); if(xa-dir>=0) opts.push([xa-dir,xb]); if(!opts.length) break;
+    let best=null,bp=sig?-1:2; for(const o of opts){ if(o[0]+o[1]<1) continue; const q=rateTest(o[0],TA,o[1],TB,alt); if(sig?q>bp:q<bp){ bp=q; best=o; } } if(!best) break; [xa,xb]=best; if(sig?bp>a:bp<=a){ frag=i; break; } }
+  const color=colorFrag(sig,frag,kA+kB), th=kB/(kA+kB), tlo=cpLower(kA+kB,kB,a/2), thi=cpUpper(kA+kB,kB,a/2), rr=x=>x>=1?Infinity:x/(1-x)*TA/TB;
+  const cmp=paired?(alt==='ne'?'ha cambiado':alt==='gt'?'ha aumentado':'ha bajado'):(alt==='ne'?'distinta':alt==='gt'?'mayor':'menor');
+  const text=paired
+    ?(sig?`La tasa de ${L} <b>${cmp}</b>: de ${fnum(rA)} a ${fnum(rB)} por ${P}. Si nada hubiera cambiado, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`:`De ${fnum(rA)} a ${fnum(rB)} ${L} por ${P}: no puedes afirmar que ${cmp}. Un cambio así saldría por azar un <b>${fmtP(p)}</b> de las veces.`)
+    :(sig?`La tasa de ${L} es <b>${cmp} en ${B} (${fnum(rB)}/${P}) que en ${A} (${fnum(rA)}/${P})</b>. Si no hubiera diferencia real, verías algo así solo un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`:`${B} (${fnum(rB)}/${P}) y ${A} (${fnum(rA)}/${P}) no son distinguibles: una diferencia así saldría por azar un <b>${fmtP(p)}</b> de las veces.`);
+  const fh=sig?(frag==null?'Resultado muy robusto.':`Bastaría con que <b>${fmtInt(frag)}</b> ${L} hubieran caído en el otro ${paired?'periodo':'grupo'} para que dejara de ser significativo. ${color==='green'?'Margen cómodo.':'Resultado frágil.'}`)
+    :(frag==null?'Estás lejos de poder afirmarlo.':`Te faltarían <b>${fmtInt(frag)}</b> ${L} en el sentido de la diferencia para poder afirmarlo.`);
+  const pool=(kA+kB)/(TA+TB);
+  return {color,sig,...testHead(color,sig),kind:'test',text,
+    facts:[[`${fnum(rA)} → ${fnum(rB)}`,`${L} por ${P}: ${A} → ${B}`],[`×${fnum(rr(th))}`,`razón de tasas; rango plausible ×${fnum(rr(tlo))} a ×${fnum(rr(thi))}`],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+    frag:fragBox(color,fh),hasNull:true,
+    sim:(mode,N)=>{ const EA=N||TA, EB=N||TB, sA=poisSampler((mode==='null'?pool:rA)*EA), sB=poisSampler((mode==='null'?pool:rB)*EB);
+      return {draw:q=>{ const x=sA(q),y=sB(q); return {est:y/EB-x/EA,hit:x+y>0&&rateTest(x,EA,y,EB,alt)<=a}; },fmt:v=>(v>=0?'+':'')+fnum(v),lines:[{x:rB-rA,label:paired?'tu cambio':'tu diferencia'},{x:0,label:'sin diferencia',dash:1}],estLabel:`diferencia de tasas (${d.label} por ${d.per})`}; },
+    plan:{kind:'power',n0:(TA+TB)/2,unitWord:`${plural(d.per)} ${paired?'en cada periodo':'por grupo'}`,perGroup:true,metric:N=>powerRates(N,rA,rB,a,alt),feasible:alt==='ne'?rA!==rB:(alt==='gt'?rB>rA:rB<rA),minN:1},
+    adv:{test:'Test condicional exacto de dos tasas de Poisson',formulas:[
+      ['Condicionando al total de sucesos, bajo H₀ (misma tasa) los de B siguen una binomial:',TX`K_B\mid (K_A+K_B=t)\ \sim\ \mathrm{Bin}\Big(t,\ \tfrac{T_B}{T_A+T_B}\Big)`],
+      ['Razón de tasas e intervalo exacto (a partir del intervalo de Clopper–Pearson de θ):',TX`\widehat{RR}=\frac{K_B/T_B}{K_A/T_A},\qquad RR=\frac{\theta}{1-\theta}\cdot\frac{T_A}{T_B}`]],
+      rows:[['k A / T A',`${fmtInt(kA)} / ${fnum(TA)}`],['k B / T B',`${fmtInt(kB)} / ${fnum(TB)}`],['p-valor exacto',fmtP(p)],['Fragilidad (sucesos)',frag==null?'—':fmtInt(frag)]]}};
+}
+CASES['cnt-two']={
+  test:'Test condicional exacto de dos tasas',
+  lead:'Para cada grupo: cuántas veces ocurrió y en cuánto tiempo.',
+  def:()=>({label:'incidencias',per:'mes',nameA:'Equipo A',nameB:'Equipo B',kA:47,TA:6,kB:26,TB:6}),
+  form:[{t:'text',k:'label',label:'¿Qué cuentas?'},{t:'text',k:'per',label:'Unidad de tiempo (singular)'},{t:'group',nk:'nameA',items:[{k:'kA',label:'Nº de sucesos'},{k:'TA',label:'Periodos',float:1}]},{t:'group',nk:'nameB',items:[{k:'kB',label:'Nº de sucesos'},{k:'TB',label:'Periodos',float:1}]}],
+  settings:['alpha','alt'], alts:{ne:'Distintas',gt:'B mayor que A',lt:'B menor que A'}, altDef:'ne',
+  analyze(d,st){ return cntTwo(d,st,[d.nameA||'A',d.nameB||'B'],false); }
+};
+CASES['cnt-pair']={
+  test:'Test condicional exacto de dos tasas',
+  lead:'Los mismos sujetos o el mismo sistema: sucesos antes y después del cambio.',
+  def:()=>({label:'incidencias',per:'mes',kA:47,TA:6,kB:30,TB:6}),
+  form:[{t:'text',k:'label',label:'¿Qué cuentas?'},{t:'text',k:'per',label:'Unidad de tiempo (singular)'},{t:'group',title:'Antes',items:[{k:'kA',label:'Nº de sucesos'},{k:'TA',label:'Periodos',float:1}]},{t:'group',title:'Después',items:[{k:'kB',label:'Nº de sucesos'},{k:'TB',label:'Periodos',float:1}]}],
+  settings:['alpha','alt'], alts:{ne:'Ha cambiado',gt:'Ha aumentado',lt:'Ha bajado'}, altDef:'ne',
+  analyze(d,st){ return cntTwo(d,st,['antes','después'],true); }
+};
+
+/* ---------------- Categorías ---------------- */
+const CAT_DEF=()=>[{name:'Proveedor A',c:52,c2:30},{name:'Proveedor B',c:41,c2:45},{name:'Proveedor C',c:30,c2:20},{name:'Proveedor D',c:17,c2:15}];
+function readCats(rows,key='c'){ const names=[],cnt=[]; for(const r of rows){ const v=int(r[key]); if(!(v>=0)) return {error:'Todos los recuentos deben ser números ≥ 0.'}; names.push(r.name||'—'); cnt.push(v); } if(names.length<2) return {error:'Necesito al menos 2 categorías.'}; return {names,cnt,n:cnt.reduce((a,b)=>a+b,0)}; }
+function multSampler(probs){ const s=catSampler(probs), K=probs.length; return (N,r)=>{ const o=new Array(K).fill(0); for(let i=0;i<N;i++) o[s(r)]++; return o; }; }
+
+CASES['cat-est']={
+  test:'Intervalos exactos simultáneos (Clopper–Pearson + Bonferroni)',
+  lead:'Cuántas respuestas recibió cada opción.',
+  def:()=>({label:'proveedor preferido',rows:CAT_DEF(),margin:6}),
+  form:[{t:'text',k:'label',label:'¿Qué preguntaste?'},{t:'cats',k:'rows',cols:[['c','Respuestas']]}],
+  settings:['alpha','margin'], marginUnit:'pp', marginHint:'Cuánto error aceptas en el porcentaje de cada opción.',
+  analyze(d,st){ const C=readCats(d.rows); if(C.error) return err(C.error); if(C.n<1) return err('Necesito al menos una respuesta.');
+    const a=st.alpha, K=C.names.length, ak=a/K, mg=numv(d.margin)/100; if(!(mg>0)) return err('El margen aceptable debe ser mayor que 0.');
+    const sh=C.cnt.map(c=>c/C.n), lo=C.cnt.map(c=>cpLower(C.n,c,ak/2)), hi=C.cnt.map(c=>cpUpper(C.n,c,ak/2)), half=Math.max(...sh.map((s,i)=>Math.max(s-lo[i],hi[i]-s))), color=half<=mg?'green':half<=2*mg?'amber':'red';
+    const top=sh.indexOf(Math.max(...sh));
+    return {color,...estHead(color),kind:'est',
+      text:`Con ${fmtInt(C.n)} respuestas, cada porcentaje tiene un margen de hasta <b>±${pp(half)}</b> (confianza conjunta del ${pct0(1-a)}); pediste ±${pp(mg)}. La opción más elegida, <b>${esc(C.names[top])}</b>, está entre el ${pct(lo[top])} y el ${pct(hi[top])}.`,
+      facts:[[fmtInt(C.n),'respuestas en total'],[`${pct(sh[top])}`,`${esc(C.names[top])} (la más elegida)`],[`±${pp(half)}`,'margen máximo entre opciones']],
+      viz:catBars(C.names,[{label:'observado',counts:C.cnt,color:'var(--accent)',lo,hi}]),
+      frag:null,hasNull:false,margin:mg,
+      sim:(mode,N=C.n)=>{ const ms=multSampler(sh); return {draw:r=>{ const o=ms(N,r); let ok=true; for(let i=0;i<K;i++) if(Math.abs(o[i]/N-sh[i])>mg){ ok=false; break; } return {est:o[top]/N,hit:ok}; },fmt:pct0,lines:[{x:sh[top],label:C.names[top]}],estLabel:`% de «${C.names[top]}» en cada repetición`}; },
+      plan:{kind:'margin',n0:C.n,target:mg,unitWord:'respuestas',fmt:v=>'±'+pp(v),metric:N=>Math.max(...sh.map(s=>{ const kk=Math.round(s*N); return Math.max(kk/N-cpLower(N,kk,ak/2),cpUpper(N,kk,ak/2)-kk/N); }))},
+      adv:{test:this.test,formulas:[
+        ['Las respuestas siguen una multinomial; cada opción por separado es binomial:',TX`(X_1,\dots,X_K)\sim\mathrm{Mult}(n;\,p_1,\dots,p_K),\qquad X_i\sim\mathrm{Bin}(n,p_i)`],
+        ['Para que todos los intervalos acierten a la vez con confianza ≥ 1−α, cada uno se calcula a nivel α/K (Bonferroni):',TX`IC_i=\mathrm{CP}\big(x_i,n;\ \alpha/K\big),\qquad \alpha/K=${(ak).toFixed(4)}`]],
+        rows:C.names.map((nm,i)=>[esc(nm),`${pct(sh[i])} (${pct(lo[i])} – ${pct(hi[i])})`])}};
+  }
+};
+CASES['cat-thr']={
+  test:'Test binomial exacto: 1.ª frente a 2.ª opción',
+  lead:'Cuántas respuestas recibió cada opción. Miro si la más votada gana de verdad.',
+  def:()=>({label:'proveedor preferido',rows:CAT_DEF()}),
+  form:[{t:'text',k:'label',label:'¿Qué preguntaste?'},{t:'cats',k:'rows',cols:[['c','Respuestas']]}],
+  settings:['alpha'],
+  analyze(d,st){ const C=readCats(d.rows); if(C.error) return err(C.error); const a=st.alpha;
+    const ord=C.cnt.map((c,i)=>i).sort((x,y)=>C.cnt[y]-C.cnt[x]), i1=ord[0], i2=ord[1], k1=C.cnt[i1], k2=C.cnt[i2], m=k1+k2; if(m<1) return err('Las dos opciones más votadas no tienen respuestas.');
+    const p=binomTest(m,k1,0.5,'gt'), sig=p<=a, N1=esc(C.names[i1]), N2=esc(C.names[i2]); let frag=null;
+    for(let i=1;i<=m;i++){ const kk=sig?k1-i:k1+i; if(kk<0||kk>m) break; const q=binomTest(m,kk,0.5,'gt'); if(sig?q>a:q<=a){ frag=i; break; } }
+    const color=colorFrag(sig,frag,C.n);
+    const text=sig?`<b>${N1}</b> es de verdad la opción preferida frente a ${N2} (${fmtInt(k1)} frente a ${fmtInt(k2)}). Si en realidad empataran, una ventaja así solo saldría por azar un <b>${fmtP(p)}</b> de las veces (tu límite: ${pct0(a)}).`
+      :`${N1} va por delante (${fmtInt(k1)} frente a ${fmtInt(k2)} de ${N2}), pero la ventaja podría ser azar: saldría un <b>${fmtP(p)}</b> de las veces aunque empataran.`;
+    const fh=sig?(frag==null?'Resultado muy robusto.':`Bastaría con que <b>${fmtInt(frag)}</b> ${frag===1?'persona hubiera':'personas hubieran'} elegido ${N2} en vez de ${N1} para que la ventaja dejara de ser clara. ${color==='green'?'Margen cómodo.':'Resultado frágil.'}`)
+      :`Te faltarían <b>${fmtInt(frag??0)}</b> votos de ${N2} pasándose a ${N1} para poder afirmarlo.`;
+    const sh=C.cnt.map(c=>c/C.n), pi=m/C.n, th=k1/m;
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[`${pct(k1/C.n)} vs ${pct(k2/C.n)}`,`${N1} vs ${N2}`],[`+${pp((k1-k2)/C.n)}`,'ventaja de la primera'],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      viz:catBars(C.names,[{label:'observado',counts:C.cnt,color:'var(--accent)'}]),
+      frag:fragBox(color,fh),hasNull:true,
+      sim:(mode,N=C.n)=>{ const q=[...sh]; if(mode==='null'){ const avg=(q[i1]+q[i2])/2; q[i1]=avg; q[i2]=avg; } const ms=multSampler(q), cache=new Map();
+        return {draw:r=>{ const o=ms(N,r), mm=o[i1]+o[i2]; if(!mm) return {est:0,hit:false}; if(!cache.has(mm)) cache.set(mm,critBin(mm,0.5,a,'gt')); return {est:(o[i1]-o[i2])/N,hit:o[i1]>=cache.get(mm).kU}; },fmt:v=>(v>=0?'+':'')+pp(v),lines:[{x:(k1-k2)/C.n,label:'tu ventaja'},{x:0,label:'empate',dash:1}],estLabel:`ventaja de ${C.names[i1]} sobre ${C.names[i2]}`}; },
+      plan:{kind:'power',n0:C.n,unitWord:'respuestas',metric:N=>powerCond(N,pi,th,0.5,a,'gt'),feasible:k1>k2},
+      adv:{test:this.test,formulas:[
+        ['Entre quienes eligieron una de las dos primeras opciones, bajo H₀ (empate) cada respuesta va a una u otra con probabilidad ½:',TX`X_1\mid (X_1+X_2=m)\ \sim\ \mathrm{Bin}(m,\tfrac12),\qquad p=P(X_1\ge k_1\mid m)`],
+        ['Potencia exacta con N respuestas (π = cuota conjunta de las dos, θ = k₁/m):',TX`\text{Pot}(N)=\sum_m\binom{N}{m}\pi^m(1-\pi)^{N-m}\,P(X_1\ge c_m\mid m,\theta)`]],
+        rows:[['k₁ / k₂',`${fmtInt(k1)} / ${fmtInt(k2)}`],['p-valor exacto',fmtP(p)],['Fragilidad (votos)',frag==null?'—':fmtInt(frag)]]}};
+  }
+};
+CASES['cat-two']={
+  test:'χ² de Monte Carlo con márgenes fijos (Freeman–Halton)',
+  lead:'Cuántas respuestas recibió cada opción en cada grupo.',
+  def:()=>({label:'proveedor preferido',nameA:'España',nameB:'Portugal',rows:CAT_DEF()}),
+  form:[{t:'text',k:'label',label:'¿Qué preguntaste?'},{t:'row',items:[{k:'nameA',label:'Grupo A',text:1},{k:'nameB',label:'Grupo B',text:1}]},{t:'cats',k:'rows',cols:[['c','A'],['c2','B']]}],
+  settings:['alpha'],
+  analyze(d,st){ const CA=readCats(d.rows,'c'), CB=readCats(d.rows,'c2'); if(CA.error) return err(CA.error); if(CB.error) return err(CB.error); if(CA.n<1||CB.n<1) return err('Cada grupo necesita al menos una respuesta.');
+    if(CA.n+CB.n>20000) return err('Demasiados datos para la simulación en el navegador (máx. 20.000).');
+    const a=st.alpha, A=esc(d.nameA||'A'), B=esc(d.nameB||'B'), K=CA.names.length, p=chi2MC(CA.cnt,CB.cnt,10000,SEED), sig=p<=a, color=colorP(p,a);
+    const sA=CA.cnt.map(c=>c/CA.n), sB=CB.cnt.map(c=>c/CB.n), dif=sA.map((x,i)=>sB[i]-x), im=dif.map(Math.abs).indexOf(Math.max(...dif.map(Math.abs))), md=Math.abs(dif[im]);
+    const pool=CA.cnt.map((c,i)=>(c+CB.cnt[i])/(CA.n+CB.n)), obsStat=chi2Stat(CA.cnt,CB.cnt);
+    const text=sig?`Las preferencias <b>son distintas</b> entre ${A} y ${B}. La mayor diferencia está en <b>${esc(CA.names[im])}</b> (${pct(sA[im])} frente a ${pct(sB[im])}). Si los dos grupos pensaran igual, un reparto tan distinto saldría solo un <b>${fmtP(p)}</b> de las veces.`
+      :`No hay evidencia de que ${A} y ${B} repartan sus preferencias de forma distinta: diferencias como las tuyas saldrían por azar un <b>${fmtP(p)}</b> de las veces.`;
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[`${fmtInt(CA.n)} / ${fmtInt(CB.n)}`,`respuestas en ${A} / ${B}`],[pp(md),`mayor diferencia (${esc(CA.names[im])})`],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      viz:catBars(CA.names,[{label:d.nameA||'A',counts:CA.cnt,color:'var(--accent)'},{label:d.nameB||'B',counts:CB.cnt,color:'var(--coral)'}]),
+      frag:pFallbackFrag(p,a,sig),hasNull:true,
+      sim:(mode,N)=>{ const NA=N||CA.n, NB=N||CB.n, mA=multSampler(mode==='null'?pool:sA), mB=multSampler(mode==='null'?pool:sB);
+        return {draw:r=>{ const x=mA(NA,r), y=mB(NB,r); let df=-1; for(let i=0;i<K;i++) if(x[i]+y[i]>0) df++; let mx=0; for(let i=0;i<K;i++) mx=Math.max(mx,Math.abs(y[i]/NB-x[i]/NA)); return {est:mx,hit:chisqUpper(chi2Stat(x,y),df)<=a}; },fmt:v=>pp(v),lines:[{x:md,label:'tu diferencia'}],estLabel:'mayor diferencia entre grupos (pp)'}; },
+      plan:{kind:'power',n0:Math.round((CA.n+CB.n)/2),unitWord:'respuestas por grupo',perGroup:true,metric:null,feasible:md>0},
+      adv:{test:this.test,formulas:[
+        ['Estadístico χ² de la tabla 2×K:',TX`X^2=\sum_{g\in\{A,B\}}\sum_{i=1}^{K}\frac{(O_{gi}-E_{gi})^2}{E_{gi}},\qquad E_{gi}=\frac{n_g\,c_i}{n}`],
+        ['p-valor exacto por Monte Carlo: se generan 10.000 tablas con los mismos totales (reparto hipergeométrico multivariante) y se cuenta cuántas son tan extremas:',TX`p=\frac{1+\#\{b:\ X^{2}_{*b}\ge X^2_{obs}\}}{B+1}`],
+        ['En la simulación y la potencia, cada repetición usa la distribución χ² asintótica para ser instantánea.',TX`p_r\approx P(\chi^2_{K-1}\ge X^2_r)`]],
+        rows:[['X² observado',fnum(obsStat,3)],['p-valor Monte Carlo',fmtP(p)],['p-valor χ² asintótico (comparativa)',fmtP(chisqUpper(obsStat,K-1))]]}};
+  }
+};
+CASES['cat-pair']={
+  test:'Test de simetría de Bowker (Monte Carlo)',
+  lead:'Cruza la opción de cada persona antes (filas) y después (columnas).',
+  def:()=>({label:'modelo de gestión preferido',names:['Interno','Externo','Mixto'],T:[[30,14,6],[4,22,3],[5,12,24]]}),
+  form:[{t:'text',k:'label',label:'¿Qué preguntaste?'},{t:'catpair'}],
+  settings:['alpha'],
+  analyze(d,st){ const K=d.names.length; if(K<2) return err('Necesito al menos 2 categorías.'); const T=d.T.map(r=>r.map(int));
+    if(T.some(r=>r.some(v=>!(v>=0)))) return err('Todas las casillas deben ser números ≥ 0.'); const n=T.flat().reduce((a,b)=>a+b,0); if(n<1) return err('Necesito al menos un par.');
+    const a=st.alpha, bs=bowkerStat(T); if(bs.df===0) return err('Nadie ha cambiado de opción: no hay nada que analizar.');
+    const p=bowkerMC(T,10000,SEED), sig=p<=a, color=colorP(p,a), before=T.map(r=>r.reduce((x,y)=>x+y,0)/n), after=d.names.map((_,j)=>T.reduce((s,r)=>s+r[j],0)/n);
+    const ch=after.map((v,i)=>v-before[i]), im=ch.map(Math.abs).indexOf(Math.max(...ch.map(Math.abs))), md=Math.abs(ch[im]), nm=esc(d.names[im]);
+    const text=sig?`Las preferencias <b>han cambiado</b>. El mayor movimiento es en <b>${nm}</b>: del ${pct(before[im])} al ${pct(after[im])}. Si nadie hubiera cambiado de forma sistemática, un movimiento así saldría solo un <b>${fmtP(p)}</b> de las veces.`
+      :`No hay evidencia de un cambio sistemático de preferencias: movimientos como los tuyos saldrían por azar un <b>${fmtP(p)}</b> de las veces.`;
+    const probs=T.flat().map(v=>v/n), sym=[]; for(let i=0;i<K;i++) for(let j=0;j<K;j++) sym.push((T[i][j]+T[j][i])/(2*n));
+    const beforeC=T.map(r=>r.reduce((x,y)=>x+y,0)), afterC=d.names.map((_,j)=>T.reduce((s,r)=>s+r[j],0));
+    return {color,sig,...testHead(color,sig),kind:'test',text,
+      facts:[[fmtInt(n),'personas'],[`${ch[im]>=0?'+':''}${pp(ch[im])}`,`mayor cambio (${nm})`],[fmtP(p),'probabilidad de verlo por azar (p-valor)']],
+      viz:catBars(d.names,[{label:'Antes',counts:beforeC,color:'var(--dot)'},{label:'Después',counts:afterC,color:'var(--accent)'}]),
+      frag:pFallbackFrag(p,a,sig),hasNull:true,
+      sim:(mode,N=n)=>{ const ms=multSampler(mode==='null'?sym:probs);
+        return {draw:r=>{ const o=ms(N,r), M=[]; for(let i=0;i<K;i++) M.push(o.slice(i*K,i*K+K)); const b=bowkerStat(M); let mx=0; for(let i=0;i<K;i++){ let rs=0,cs=0; for(let j=0;j<K;j++){ rs+=M[i][j]; cs+=M[j][i]; } mx=Math.max(mx,Math.abs(cs-rs)/N); } return {est:mx,hit:b.df>0&&chisqUpper(b.s,b.df)<=a}; },fmt:v=>pp(v),lines:[{x:md,label:'tu cambio'}],estLabel:'mayor cambio en una opción (pp)'}; },
+      plan:{kind:'power',n0:n,unitWord:'personas',metric:null,feasible:true},
+      adv:{test:this.test,formulas:[
+        ['Bajo H₀ (simetría), quien cambia de i a j es igual de probable que quien cambia de j a i:',TX`B=\sum_{i<j}\frac{(n_{ij}-n_{ji})^2}{n_{ij}+n_{ji}}`],
+        ['p-valor exacto condicional por Monte Carlo: cada par (n_ij, n_ji) se reparte al azar con probabilidad ½, 10.000 veces:',TX`n^{*}_{ij}\sim\mathrm{Bin}(n_{ij}+n_{ji},\tfrac12),\qquad p=\frac{1+\#\{B^{*}\ge B\}}{R+1}`]],
+        rows:[['Estadístico de Bowker',fnum(bs.s,3)],['Grados de libertad',fmtInt(bs.df)],['p-valor Monte Carlo',fmtP(p)],['p-valor χ² asintótico (comparativa)',fmtP(chisqUpper(bs.s,bs.df))]]}};
+  }
+};
+</script>
+<script>
+/* =====================================================================
+   Interfaz
+   ===================================================================== */
+const $=id=>document.getElementById(id);
+const tick=()=>new Promise(r=>setTimeout(r,0));
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+const ICONS={
+  bin:`<svg viewBox="0 0 64 64" class="ico"><circle cx="22" cy="32" r="16" fill="var(--green)" opacity=".9"/><path d="M14 32l6 6 11-12" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="44" cy="32" r="16" fill="var(--coral)" opacity=".9"/><path d="M38 26l12 12M50 26L38 38" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/></svg>`,
+  num:`<svg viewBox="0 0 64 64" class="ico"><rect x="6" y="36" width="52" height="14" rx="4" fill="var(--sun)"/><path d="M14 36v6M22 36v9M30 36v6M38 36v9M46 36v6" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/><path d="M34 10c-7 0-11 5-11 10 0 8 11 14 11 14s11-6 11-14c0-5-4-10-11-10z" fill="var(--accent)"/><circle cx="34" cy="20" r="4" fill="#fff"/></svg>`,
+  cnt:`<svg viewBox="0 0 64 64" class="ico"><rect x="6" y="10" width="52" height="44" rx="10" fill="var(--soft2)"/><path d="M16 20v24M24 20v24M32 20v24M40 20v24" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round"/><path d="M11 40L47 23" stroke="var(--coral)" stroke-width="4.5" stroke-linecap="round"/><circle cx="51" cy="44" r="5" fill="var(--sun)"/></svg>`,
+  cat:`<svg viewBox="0 0 64 64" class="ico"><rect x="8" y="30" width="10" height="24" rx="3" fill="var(--accent)"/><rect x="21" y="14" width="10" height="40" rx="3" fill="var(--coral)"/><rect x="34" y="24" width="10" height="30" rx="3" fill="var(--sun)"/><rect x="47" y="38" width="10" height="16" rx="3" fill="var(--green)"/></svg>`,
+  est:`<svg viewBox="0 0 64 64" class="ico"><circle cx="28" cy="28" r="17" fill="var(--soft2)" stroke="var(--accent)" stroke-width="5"/><path d="M41 41l13 13" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/><path d="M19 32l5-8 5 5 6-9" stroke="var(--coral)" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  thr:`<svg viewBox="0 0 64 64" class="ico"><rect x="10" y="34" width="12" height="20" rx="3" fill="var(--dot)"/><rect x="26" y="26" width="12" height="28" rx="3" fill="var(--dot)"/><rect x="42" y="10" width="12" height="44" rx="3" fill="var(--green)"/><path d="M4 22h56" stroke="var(--coral)" stroke-width="3.5" stroke-dasharray="5 4" stroke-linecap="round"/></svg>`,
+  two:`<svg viewBox="0 0 64 64" class="ico"><circle cx="20" cy="32" r="16" fill="var(--accent)" opacity=".2"/><circle cx="44" cy="32" r="16" fill="var(--coral)" opacity=".22"/><g fill="var(--accent)"><circle cx="14" cy="27" r="3"/><circle cx="22" cy="24" r="3"/><circle cx="18" cy="35" r="3"/><circle cx="25" cy="38" r="3"/></g><g fill="var(--coral)"><circle cx="40" cy="26" r="3"/><circle cx="48" cy="29" r="3"/><circle cx="42" cy="37" r="3"/><circle cx="50" cy="39" r="3"/></g></svg>`,
+  pair:`<svg viewBox="0 0 64 64" class="ico"><path d="M14 26a18 18 0 0 1 32-8" stroke="var(--accent)" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M47 9v10H37" stroke="var(--accent)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 38a18 18 0 0 1-32 8" stroke="var(--coral)" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M17 55V45h10" stroke="var(--coral)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+};
+const TYPES=[
+  {k:'bin',title:'Sí / no',desc:'Cada respuesta es una de dos opciones.',ex:'«¿Externalizaría?» → Sí / No'},
+  {k:'num',title:'Un número',desc:'Cada dato es una cantidad que se mide.',ex:'«Gasto mensual en TI: 12,4 k€»'},
+  {k:'cnt',title:'Un conteo',desc:'Cuántas veces ocurre algo en un periodo.',ex:'«47 incidencias en 6 meses»'},
+  {k:'cat',title:'Una categoría',desc:'Cada respuesta elige una opción entre varias.',ex:'«Prefiero el proveedor B»'}
+];
+const GOALS={est:{title:'Estimar',desc:'Saber cuánto vale y con qué precisión.'},thr:{title:'Superar un umbral',desc:'Comprobar si pasa de un valor que te importa.'},two:{title:'Comparar dos grupos',desc:'Ver si dos grupos distintos se diferencian.'},pair:{title:'Antes y después',desc:'Los mismos sujetos, medidos dos veces.'}};
+const EX={
+  bin:{est:'«¿Qué % de empresas no quiere externalizar?»',thr:'«¿Más del 50 % no quiere externalizar?»',two:'«¿España piensa distinto que Portugal?»',pair:'«¿Cambiaron de opinión tras la demo?»'},
+  num:{est:'«¿Cuánto gastan de media en TI?»',thr:'«¿Gastan más de 11 k€ de media?»',two:'«¿Gasta más Portugal que España?»',pair:'«¿Bajó el gasto tras el cambio?»'},
+  cnt:{est:'«¿Cuántas incidencias tenemos al mes?»',thr:'«¿Superamos las 6 incidencias al mes?»',two:'«¿Tiene más incidencias el equipo A?»',pair:'«¿Bajaron las incidencias tras el cambio?»'},
+  cat:{est:'«¿Cómo se reparten las preferencias?»',thr:'«¿El proveedor A gana de verdad?»',two:'«¿Prefieren lo mismo en España y Portugal?»',pair:'«¿Cambió la preferencia tras la campaña?»'}
+};
+const REPS=[10,20,50,100,200,500,1000,2000,5000,10000];
+const APP={type:null,goal:null,data:{},alt:{},st:{alpha:0.05,power:0.8,reps:1000,simMode:'real'},R:null,simTok:0,planTok:0,sim:null};
+const key=()=>`${APP.type}-${APP.goal}`;
+
+/* ---------- Paso 1 y 2 ---------- */
+function choiceCard(o,on,onPick,ex){
+  const b=document.createElement('button'); b.className='choice'+(on?' on':''); b.type='button';
+  b.innerHTML=`${ICONS[o.k]}<b>${o.title}</b><span>${o.desc}</span>${ex?`<div class="ex">${ex}</div>`:''}`;
+  b.onclick=()=>onPick(o.k); return b;
+}
+function renderTypes(){
+  const box=$('typeChoices'); box.innerHTML=''; TYPES.forEach(t=>box.appendChild(choiceCard(t,APP.type===t.k,pickType,t.ex)));
+}
+function goalList(){ return ['est','thr','two','pair'].map(k=>({k,...GOALS[k],...(APP.type==='cat'&&k==='thr'?{title:'¿Hay un ganador claro?',desc:'Ver si la opción más votada gana de verdad.'}:{})})); }
+function renderGoals(){ const box=$('goalChoices'); box.innerHTML=''; goalList().forEach(g=>box.appendChild(choiceCard(g,APP.goal===g.k,pickGoal,EX[APP.type][g.k]))); }
+function sumChip(icon,label,step){ return `<span class="sum-chip" data-edit="${step}">${ICONS[icon]}${label}</span>`; }
+function collapse(step,collapsed){
+  const ch=step===1?$('typeChoices'):$('goalChoices'), sm=step===1?$('typeSum'):$('goalSum'), ed=document.querySelector(`[data-edit="${step}"].edit`);
+  ch.classList.toggle('hidden',collapsed); sm.classList.toggle('hidden',!collapsed); ed.classList.toggle('hidden',!collapsed);
+}
+function pickType(k){
+  APP.type=k; renderTypes();
+  const t=TYPES.find(x=>x.k===k); $('typeSum').innerHTML=sumChip(k,t.title,1); collapse(1,true);
+  $('s2').classList.remove('hidden'); $('s2').classList.add('fade-in'); renderGoals();
+  if(APP.goal){ const g=goalList().find(x=>x.k===APP.goal); $('goalSum').innerHTML=sumChip(APP.goal,g.title,2); buildCase(); }
+  else { collapse(2,false); $('s2').scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+function pickGoal(k){
+  APP.goal=k; renderGoals(); const g=goalList().find(x=>x.k===k); $('goalSum').innerHTML=sumChip(k,g.title,2); collapse(2,true);
+  buildCase(); setTimeout(()=>$('s3').scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+document.addEventListener('click',e=>{ const el=e.target.closest('[data-edit]'); if(!el) return; const s=+el.dataset.edit; collapse(s,false); if(s===1) $('s1').scrollIntoView({behavior:'smooth',block:'start'}); });
+
+/* ---------- Paso 3: formulario ---------- */
+function el(tag,attrs={},html=''){ const e=document.createElement(tag); for(const [k,v] of Object.entries(attrs)){ if(k==='class') e.className=v; else if(k.startsWith('on')) e[k]=v; else e.setAttribute(k,v); } if(html) e.innerHTML=html; return e; }
+function field(label,hint,input){ const f=el('div',{class:'f'}); f.appendChild(el('label',{},label)); if(hint) f.appendChild(el('span',{class:'h'},hint)); f.appendChild(input); return f; }
+function inp(obj,k,{text=false,cls='inp'}={}){ const i=el('input',{class:cls,type:'text',inputmode:text?'text':'decimal',value:obj[k]??''}); i.oninput=()=>{ obj[k]=i.value; schedule(); }; return i; }
+function rowFields(obj,items){ const r=el('div',{class:'row'}); for(const it of items) r.appendChild(field(it.label,it.hint,inp(obj,it.k,{text:!!it.text,cls:it.text?'inp':'inp big-num'}))); return r; }
+function tabs(opts,cur,onPick){ const t=el('div',{class:'tabs'}); for(const [k,l] of opts){ const b=el('button',{type:'button',class:k===cur?'on':''},l); b.onclick=()=>onPick(k); t.appendChild(b); } return t; }
+function numWidget(o){
+  const w=el('div');
+  const draw=()=>{ w.innerHTML=''; w.appendChild(tabs([['raw','Pegar datos'],['sum','Media y desviación'],['range','Rango típico']],o.method,m=>{ o.method=m; draw(); schedule(); }));
+    if(o.method==='raw'){ const ta=el('textarea',{class:'inp',placeholder:'Pega aquí una columna de Excel o valores separados por espacios'}); ta.value=o.raw||''; const info=el('div',{class:'parsed'});
+      const upd=()=>{ const xs=parseNums(ta.value); info.textContent=xs.length?`${xs.length} valores · media ${fnum(mean(xs))}${xs.length>1?` · desviación típica ${fnum(sdev(xs))}`:''}`:'Sin valores todavía'; };
+      ta.oninput=()=>{ o.raw=ta.value; upd(); schedule(); }; upd(); w.appendChild(ta); w.appendChild(info); }
+    else if(o.method==='sum') w.appendChild(rowFields(o,[{k:'mean',label:'Media'},{k:'sd',label:'Desviación típica'},{k:'n',label:'Nº de datos'}]));
+    else { w.appendChild(el('span',{class:'h',style:'display:block;margin-bottom:8px;color:var(--muted);font-size:13px'},'¿No conoces la desviación típica? Dime entre qué valores suele moverse casi todo (sin rarezas) y la estimo como (máx − mín) / 4.'));
+      w.appendChild(rowFields(o,[{k:'min',label:'Mínimo habitual'},{k:'max',label:'Máximo habitual'},{k:'mean',label:'Media (opcional)'},{k:'n',label:'Nº de datos'}])); } };
+  draw(); return w;
+}
+function numPairWidget(o){
+  const w=el('div');
+  const draw=()=>{ w.innerHTML=''; w.appendChild(tabs([['raw','Pegar antes y después'],['sum','Resumen de las diferencias']],o.method,m=>{ o.method=m; draw(); schedule(); }));
+    if(o.method==='raw'){ const g=el('div',{class:'row'}); const info=el('div',{class:'parsed'});
+      const upd=()=>{ const b=parseNums(o.before), f=parseNums(o.after); info.textContent=b.length===f.length&&b.length?`${b.length} pares · cambio medio ${fnum(mean(f.map((v,i)=>v-b[i])))}`:`Antes: ${b.length} valores · Después: ${f.length} valores`; };
+      for(const [k,l] of [['before','Antes'],['after','Después']]){ const ta=el('textarea',{class:'inp'}); ta.value=o[k]||''; ta.oninput=()=>{ o[k]=ta.value; upd(); schedule(); }; g.appendChild(field(l,'',ta)); }
+      w.appendChild(g); w.appendChild(info); upd(); }
+    else w.appendChild(rowFields(o,[{k:'mean',label:'Cambio medio (después − antes)'},{k:'sd',label:'Desviación típica del cambio'},{k:'n',label:'Nº de pares'}])); };
+  draw(); return w;
+}
+function pair22(d){
+  const t=el('table',{class:'ctab'}); t.innerHTML=`<tr><th></th><th>Después: sí</th><th>Después: no</th></tr>`;
+  for(const [lab,ks] of [['Antes: sí',['a','b']],['Antes: no',['c','dd']]]){ const tr=el('tr'); tr.appendChild(el('th',{},lab)); for(const k of ks){ const td=el('td'); td.appendChild(inp(d,k,{cls:'inp big-num'})); tr.appendChild(td); } t.appendChild(tr); }
+  const w=el('div'); w.appendChild(t); w.appendChild(el('span',{class:'h',style:'display:block;color:var(--muted);font-size:13px;margin-top:6px'},'Las casillas en diagonal (sí→no y no→sí) son quienes cambiaron de opinión: son las que deciden el test.')); return w;
+}
+function catsWidget(d,k,cols){
+  const w=el('div');
+  const draw=()=>{ w.innerHTML=''; const t=el('table',{class:'ctab'}); t.innerHTML=`<tr><th>Opción</th>${cols.map(c=>`<th>${esc(c[1]==='A'?(d.nameA||'A'):c[1]==='B'?(d.nameB||'B'):c[1])}</th>`).join('')}<th></th></tr>`;
+    d[k].forEach((r,i)=>{ const tr=el('tr'); const td=el('td'); td.appendChild(inp(r,'name',{text:true})); tr.appendChild(td);
+      for(const [ck] of cols){ const tc=el('td'); tc.appendChild(inp(r,ck,{cls:'inp big-num'})); tr.appendChild(tc); }
+      const tx=el('td'); const x=el('button',{class:'x',type:'button',title:'Quitar'},'×'); x.onclick=()=>{ if(d[k].length>2){ d[k].splice(i,1); draw(); schedule(); } }; tx.appendChild(x); tr.appendChild(tx); t.appendChild(tr); });
+    w.appendChild(t); const add=el('button',{class:'addrow',type:'button'},'+ Añadir opción'); add.onclick=()=>{ d[k].push({name:`Opción ${d[k].length+1}`,c:0,c2:0}); draw(); schedule(); }; w.appendChild(add); };
+  draw(); w._redraw=draw; return w;
+}
+function catPairWidget(d){
+  const w=el('div');
+  const draw=()=>{ w.innerHTML=''; const K=d.names.length; const t=el('table',{class:'ctab'});
+    let hd='<tr><th>Antes ↓ · Después →</th>'; for(let j=0;j<K;j++) hd+=`<th>${esc(d.names[j])}</th>`; t.innerHTML=hd+'</tr>';
+    for(let i=0;i<K;i++){ const tr=el('tr'); const th=el('th'); const ni=el('input',{class:'inp',type:'text',value:d.names[i]}); ni.oninput=()=>{ d.names[i]=ni.value; schedule(); }; ni.onchange=draw; th.appendChild(ni); tr.appendChild(th);
+      for(let j=0;j<K;j++){ const td=el('td'); const o={v:d.T[i][j]}; const x=el('input',{class:'inp big-num',type:'text',inputmode:'decimal',value:d.T[i][j]}); if(i===j) x.style.background='var(--soft)'; x.oninput=()=>{ d.T[i][j]=x.value; schedule(); }; td.appendChild(x); tr.appendChild(td); }
+      t.appendChild(tr); }
+    w.appendChild(t);
+    const bar=el('div',{style:'display:flex;gap:8px;margin-top:6px'}); const add=el('button',{class:'addrow',type:'button'},'+ Añadir opción'); add.onclick=()=>{ d.names.push(`Opción ${K+1}`); d.T.forEach(r=>r.push(0)); d.T.push(new Array(K+1).fill(0)); draw(); schedule(); };
+    const rm=el('button',{class:'addrow',type:'button'},'− Quitar la última'); rm.onclick=()=>{ if(K>2){ d.names.pop(); d.T.pop(); d.T.forEach(r=>r.pop()); draw(); schedule(); } };
+    bar.appendChild(add); bar.appendChild(rm); w.appendChild(bar);
+    w.appendChild(el('span',{class:'h',style:'display:block;color:var(--muted);font-size:13px;margin-top:6px'},'La diagonal (sombreada) son quienes no cambiaron de opción.')); };
+  draw(); return w;
+}
+function renderForm(c,d){
+  const box=$('form'); box.innerHTML=''; $('formLead').textContent=c.lead;
+  let catW=null;
+  const render=(items,parent)=>{ for(const it of items){
+    if(it.t==='text') parent.appendChild(field(it.label,it.hint,inp(d,it.k,{text:true})));
+    else if(it.t==='row') parent.appendChild(rowFields(d,it.items.map(x=>({...x,text:x.text}))));
+    else if(it.t==='num') parent.appendChild(numWidget(d[it.k]));
+    else if(it.t==='numPair') parent.appendChild(numPairWidget(d[it.k]));
+    else if(it.t==='pair22') parent.appendChild(pair22(d));
+    else if(it.t==='cats'){ catW=catsWidget(d,it.k,it.cols); parent.appendChild(catW); }
+    else if(it.t==='catpair') parent.appendChild(catPairWidget(d));
+    else if(it.t==='group'){ const g=el('div',{class:'grp'}); if(it.nk){ const n=el('input',{class:'gname',type:'text',value:d[it.nk]}); n.oninput=()=>{ d[it.nk]=n.value; schedule(); }; g.appendChild(n); } else g.appendChild(el('div',{class:'fl',style:'margin-bottom:8px'},it.title));
+      const sub=it.items.filter(x=>!x.t), wid=it.items.filter(x=>x.t); if(sub.length) g.appendChild(rowFields(d,sub)); render(wid,g); parent.appendChild(g); } } };
+  render(c.form,box);
+  // nombres de grupo en la tabla de categorías
+  if(catW) box.querySelectorAll('input').forEach(i=>{ if(i.closest('.row')) i.addEventListener('change',()=>catW._redraw()); });
+}
+function renderSettings(c,d){
+  const box=$('settings'); box.innerHTML=''; const st=APP.st;
+  if(c.settings.includes('alpha')){
+    const p=el('div',{class:'pills'}); const vals=[0.01,0.05,0.1];
+    const draw=()=>{ p.innerHTML=''; for(const v of vals){ const b=el('button',{type:'button',class:'pill'+(Math.abs(st.alpha-v)<1e-9?' on':'')},pct0(v)); b.onclick=()=>{ st.alpha=v; draw(); schedule(); }; p.appendChild(b); }
+      const custom=!vals.some(v=>Math.abs(st.alpha-v)<1e-9); const cp=el('span',{class:'pill'+(custom?' on':'')}); const ci=el('input',{type:'text',inputmode:'decimal',value:custom?(st.alpha*100).toLocaleString('es-ES'):'',placeholder:'otro'});
+      ci.onchange=()=>{ const v=numv(ci.value)/100; if(v>0&&v<0.5){ st.alpha=v; draw(); schedule(); } }; cp.appendChild(ci); cp.appendChild(document.createTextNode(' %')); p.appendChild(cp); };
+    draw(); box.appendChild(field('Riesgo de falso positivo (α)','Probabilidad aceptable de concluir que hay efecto cuando en realidad no lo hay. Lo habitual es un 5 %.',p));
+  }
+  if(c.settings.includes('alt')){
+    const k=key(); if(!APP.alt[k]) APP.alt[k]=c.altDef; const p=el('div',{class:'pills'});
+    const draw=()=>{ p.innerHTML=''; for(const [a,l] of Object.entries(c.alts)){ const b=el('button',{type:'button',class:'pill'+(APP.alt[k]===a?' on':'')},l); b.onclick=()=>{ APP.alt[k]=a; draw(); schedule(); }; p.appendChild(b); } };
+    draw(); box.appendChild(field('¿Qué quieres demostrar?','Decídelo antes de mirar los datos. Si solo te importa una dirección, el test es más potente.',p));
+  }
+  if(c.settings.includes('margin')){
+    const u=typeof c.marginUnit==='function'?c.marginUnit(d):c.marginUnit; const w=el('div',{style:'display:flex;align-items:center;gap:8px'});
+    const i=inp(d,'margin',{cls:'inp big-num'}); i.style.maxWidth='140px'; w.appendChild(el('span',{class:'big-num'},'±')); w.appendChild(i); w.appendChild(el('span',{style:'color:var(--muted)'},esc(u)));
+    box.appendChild(field('Margen de error aceptable',c.marginHint,w));
+  }
+}
+function buildCase(){
+  const k=key(), c=CASES[k]; if(!APP.data[k]) APP.data[k]=c.def(); const d=APP.data[k];
+  for(const s of ['s3','s4','s5','s6','s7']){ $(s).classList.remove('hidden'); }
+  renderForm(c,d); renderSettings(c,d); run();
+}
+
+/* ---------- Análisis ---------- */
+let timer=null; function schedule(){ clearTimeout(timer); timer=setTimeout(run,260); }
+function run(){
+  const k=key(), c=CASES[k], d=APP.data[k]; if(!c) return;
+  const st={alpha:APP.st.alpha,alt:APP.alt[k]||c.altDef||'ne',power:APP.st.power};
+  let R; try{ R=c.analyze(d,st); }catch(e){ console.error(e); R=err('Algo ha fallado en el cálculo: '+e.message); }
+  APP.R=R; renderVerdict(R);
+  const ok=!R.error; for(const s of ['s5','s6','s7']) $(s).classList.toggle('hidden',!ok);
+  if(!ok) return;
+  if(!R.hasNull) APP.st.simMode='real';
+  setupSimBar(R); runSim(); runPlan(); renderAdv(R);
+}
+function renderVerdict(R){
+  const v=$('verdict');
+  if(R.error){ v.className='card verdict v-red'; v.innerHTML=`<div class="light"><div class="lamp r"></div><div class="lamp a"></div><div class="lamp g"></div></div><div><div class="v-kicker" style="color:var(--muted)">Revisa los datos</div><p class="v-text err" style="margin-top:6px">${R.error}</p></div>`; return; }
+  const frag=R.frag?`<div class="frag ${R.frag.color}"><span class="fi">${R.frag.icon}</span><div><b>¿Cómo de frágil es?</b> ${R.frag.html}${R.frag.people||''}</div></div>`:'';
+  v.className='card verdict v-'+R.color;
+  v.innerHTML=`<div class="light"><div class="lamp r"></div><div class="lamp a"></div><div class="lamp g"></div></div>
+    <div><div class="v-kicker">${R.kicker}</div><div class="v-title">${R.title}</div><p class="v-text">${R.text}</p>
+    <div class="facts">${R.facts.map(f=>`<div class="fact"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('')}</div>${frag}${R.viz||''}</div>`;
+  const lamp=v.querySelector('.lamp.'+({green:'g',amber:'a',red:'r'})[R.color]); requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(lamp) lamp.classList.add('on'); }));
+}
+
+/* ---------- Paso 5: simulación ---------- */
+function setupSimBar(R){
+  const btns=$('simMode').querySelectorAll('button');
+  btns[0].textContent=R.kind==='est'?'Si lo que viste es la verdad':'Si lo que viste es la verdad';
+  btns[1].disabled=!R.hasNull; btns[1].title=R.hasNull?'':'Al estimar no hay una hipótesis «sin efecto» que simular';
+  btns.forEach(b=>b.classList.toggle('on',b.dataset.m===APP.st.simMode));
+  $('simLead').innerHTML=R.kind==='est'
+    ?'Imagina que repites tu estudio muchas veces con el mismo tamaño. Cada punto es una repetición: verde si su resultado cae dentro de tu margen aceptable respecto a la verdad.'
+    :(APP.st.simMode==='null'
+      ?'Imagina que <b>no hay ningún efecto</b> y repites el estudio muchas veces. Cada punto es una repetición: en rojo, las que te harían creer que sí lo hay (falsos positivos).'
+      :'Imagina que la verdad es exactamente lo que has visto y repites el estudio muchas veces. Cada punto es una repetición: en verde, las que detectan el efecto.');
+  $('simAdv').innerHTML=`Cada repetición genera datos nuevos con el mismo tamaño que los tuyos (${R.kind==='est'?'a partir de lo observado':APP.st.simMode==='null'?'bajo la hipótesis de «sin efecto»':'a partir de lo observado'}) y vuelve a aplicar la decisión. En números y categorías con varias opciones se usa la versión rápida del test (t de Student / χ²) para que 10.000 repeticiones sean instantáneas; en sí/no y conteos, el test exacto.`;
+}
+$('simMode').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; APP.st.simMode=b.dataset.m; if(APP.R&&!APP.R.error){ setupSimBar(APP.R); runSim(); } });
+function repsFromSlider(){ return REPS[+$('reps').value]; }
+$('reps').max=REPS.length-1; $('reps').value=REPS.indexOf(1000);
+const updReps=()=>{ APP.st.reps=repsFromSlider(); $('repsOut').textContent=fmtInt(APP.st.reps); };
+updReps(); $('reps').addEventListener('input',updReps); $('reps').addEventListener('change',()=>runSim());
+$('runSim').addEventListener('click',()=>runSim());
+
+function dotColors(R,mode){
+  if(R.kind==='est') return {hit:css('--green'),miss:css('--amber')};
+  return mode==='null'?{hit:css('--red'),miss:css('--dot')}:{hit:css('--green'),miss:css('--dot')};
+}
+function gridLayout(W,H,n){ let s=Math.floor(Math.sqrt(W*H/n)); let cols,rows; for(;s>1;s--){ cols=Math.floor(W/s); rows=Math.ceil(n/cols); if(rows*s<=H) break; } cols=Math.max(1,Math.floor(W/s)); rows=Math.ceil(n/cols); return {s,cols,rows,ox:(W-cols*s)/2,oy:(H-rows*s)/2}; }
+async function runSim(){
+  const R=APP.R; if(!R||R.error) return; const tok=++APP.simTok, mode=R.hasNull?APP.st.simMode:'real', reps=APP.st.reps;
+  const setup=R.sim(mode), rng=mulberry32((Date.now()^(Math.random()*1e9))>>>0), est=new Float64Array(reps), hit=new Uint8Array(reps);
+  const cv=$('dots'), dpr=window.devicePixelRatio||1, W=cv.clientWidth||600, H=window.innerWidth<640?260:340; cv.style.height=H+'px'; cv.width=W*dpr; cv.height=H*dpr;
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  const G=gridLayout(W-16,H-16,reps), col=dotColors(R,mode), r=Math.max(0.8,G.s*0.36);
+  APP.sim={est,hit,reps,done:0,mode,setup,G,col};
+  const frames=Math.min(80,reps), per=Math.ceil(reps/frames); let i=0,h=0;
+  const drawDot=(j)=>{ const cx=8+G.ox+(j%G.cols)*G.s+G.s/2, cy=8+G.oy+Math.floor(j/G.cols)*G.s+G.s/2; ctx.fillStyle=hit[j]?col.hit:col.miss; if(G.s>=4){ ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); } else ctx.fillRect(cx-G.s/2,cy-G.s/2,Math.max(1,G.s-0.3),Math.max(1,G.s-0.3)); };
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  while(i<reps){
+    const end=reduce?reps:Math.min(reps,i+per);
+    for(;i<end;i++){ const o=setup.draw(rng); est[i]=o.est; hit[i]=o.hit?1:0; h+=hit[i]; drawDot(i); }
+    APP.sim.done=i; updateSimText(R,mode,h,i,reps);
+    await new Promise(res=>requestAnimationFrame(res)); if(tok!==APP.simTok) return;
+  }
+  renderHist(R,setup,est,hit,mode);
+}
+function updateSimText(R,mode,h,done,reps){
+  const f=done?h/done:0;
+  $('simCounter').innerHTML=`${fmtInt(h)}<small> de ${fmtInt(done)}</small>`;
+  let t, leg;
+  if(R.kind==='est'){ t=`El <b>${pct(f)}</b> de las repeticiones da un resultado dentro de ${R.plan.fmt(R.margin)} de la verdad.`; leg=[['--green','dentro del margen'],['--amber','fuera del margen']]; }
+  else if(mode==='null'){ t=`Si no hubiera ningún efecto, el <b>${pct(f)}</b> de las repeticiones te habría hecho creer que sí (falso positivo). Tu límite era del ${pct0(APP.st.alpha)}: así se ve ese riesgo.`; leg=[['--red','falso positivo'],['--dot','conclusión correcta («no hay efecto»)']]; }
+  else { t=`Si la verdad es lo que has visto, detectarías el efecto en el <b>${pct(f)}</b> de las repeticiones.`+(done===reps?(R.sig?` Es decir, tu conclusión se repetiría ${fnum(f*10,1)} de cada 10 veces.`:` Es la probabilidad que tiene un estudio de tu tamaño de llegar a demostrarlo.`):''); leg=[['--green','detecta el efecto'],['--dot','no llega a detectarlo']]; }
+  $('simText').innerHTML=t; $('simLegend').innerHTML=leg.map(([c,l])=>`<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+}
+function renderHist(R,setup,est,hit,mode){
+  const box=$('simHist'), W=Math.max(280,box.clientWidth||400), H=190, m={l:10,r:10,t:26,b:34}, n=est.length;
+  let lo=Infinity,hi=-Infinity; for(const v of est){ if(v<lo) lo=v; if(v>hi) hi=v; } for(const L of setup.lines){ lo=Math.min(lo,L.x); hi=Math.max(hi,L.x); }
+  if(hi-lo<1e-12){ lo-=0.5; hi+=0.5; } const pad=(hi-lo)*0.06; lo-=pad; hi+=pad;
+  const uniq=[...new Set(Array.from(est,v=>+v.toPrecision(10)))].sort((a,b)=>a-b);
+  let B,bw,base=lo;
+  if(uniq.length>1&&uniq.length<=60){ let g=Infinity; for(let i=1;i<uniq.length;i++) g=Math.min(g,uniq[i]-uniq[i-1]); bw=g; base=uniq[0]-g/2; B=Math.round((uniq[uniq.length-1]-uniq[0])/g)+1; lo=Math.min(lo,base); hi=Math.max(hi,base+B*bw); }
+  else { B=Math.min(36,Math.max(8,Math.round(Math.sqrt(n)))); bw=(hi-lo)/B; }
+  const ch=new Array(B).fill(0), cm=new Array(B).fill(0);
+  for(let i=0;i<n;i++){ let b=Math.floor((est[i]-base)/bw+1e-9); if(b>=B) b=B-1; if(b<0) b=0; if(hit[i]) ch[b]++; else cm[b]++; }
+  const mx=Math.max(1,...ch.map((c,i)=>c+cm[i])), x=v=>m.l+(v-lo)/(hi-lo)*(W-m.l-m.r), y=v=>H-m.b-v/mx*(H-m.t-m.b), col=dotColors(R,mode);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+  for(let b=0;b<B;b++){ const x0=x(base+b*bw)+1, w=Math.max(1,x(base+(b+1)*bw)-x(base+b*bw)-2);
+    if(cm[b]) s+=`<rect x="${x0}" y="${y(cm[b])}" width="${w}" height="${y(0)-y(cm[b])}" fill="${col.miss}" rx="2"/>`;
+    if(ch[b]) s+=`<rect x="${x0}" y="${y(cm[b]+ch[b])}" width="${w}" height="${y(cm[b])-y(cm[b]+ch[b])}" fill="${col.hit}" rx="2"/>`; }
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${y(0)}" y2="${y(0)}"/>`;
+  setup.lines.forEach((L,i)=>{ const xx=x(L.x); s+=`<line x1="${xx}" x2="${xx}" y1="${m.t-8}" y2="${y(0)}" stroke="var(--ink)" stroke-width="1.6" ${L.dash?'stroke-dasharray="4 3"':''}/><text class="lb" x="${xx}" y="${m.t-12-(i%2)*0}" text-anchor="${xx>W*0.75?'end':xx<W*0.25?'start':'middle'}" dy="${i%2?-0:0}">${esc(L.label)}${i%2&&setup.lines.length>1?'':''}</text>`; });
+  s+=`<text class="tk" x="${m.l}" y="${H-18}">${setup.fmt(lo)}</text><text class="tk" x="${W-m.r}" y="${H-18}" text-anchor="end">${setup.fmt(hi)}</text><text class="tk" x="${W/2}" y="${H-4}" text-anchor="middle">${esc(setup.estLabel)}</text>`;
+  box.innerHTML=s+'</svg>';
+  // evita que las etiquetas se pisen
+  const labs=box.querySelectorAll('text.lb'); if(labs.length===2){ const a=labs[0].getBBox(), b=labs[1].getBBox(); if(a.x<b.x+b.width&&b.x<a.x+a.width) labs[1].setAttribute('y',m.t-26); }
+}
+
+/* ---------- Paso 6: planificación ---------- */
+function planMetricFn(R){
+  const P=R.plan, cache=new Map();
+  return async(N,reps=600)=>{ N=Math.max(P.minN||2,Math.round(N)); const kk=N+'|'+reps; if(cache.has(kk)) return cache.get(kk);
+    let v=P.metric?P.metric(N):null;
+    if(v==null){ const s=R.sim('real',N), rng=mulberry32(SEED+N); let h=0; for(let i=0;i<reps;i++){ if(s.draw(rng).hit) h++; if(i%200===199) await tick(); } v=h/reps; }
+    cache.set(kk,v); return v; };
+}
+async function runPlan(){
+  const R=APP.R, P=R.plan, tok=++APP.planTok, head=$('planHead'), isM=P.kind==='margin';
+  const minN=P.minN||2, maxN=P.maxN||(P.metric?200000:20000), target=isM?P.target:APP.st.power, metric=planMetricFn(R);
+  const good=v=>isM?v<=target:v>=target;
+  head.innerHTML=`<p class="lead"><span class="busy"></span> Calculando…</p>`; $('planChart').innerHTML=''; $('planNote').textContent='';
+  if(!isM&&!P.feasible){ head.innerHTML=`<p class="v-text">Con lo que has observado <b>no hay efecto que detectar</b> en la dirección que quieres demostrar, así que ningún tamaño de muestra te daría potencia. Si esperas un efecto, cambia los datos o la dirección.</p>`; $('planN').parentElement.classList.add('hidden'); return; }
+  $('planN').parentElement.classList.remove('hidden');
+  // búsqueda exponencial + bisección
+  let lo=minN, hi=Math.max(minN,Math.round(P.n0||minN)), found=null;
+  if(await metric(hi).then(good)){ while(hi>minN){ const mid=Math.max(minN,Math.floor(hi/2)); if(!(await metric(mid).then(good))){ lo=mid; break; } hi=mid; if(mid===minN){ lo=minN-1; break; } } }
+  else { while(!(await metric(hi).then(good))){ lo=hi; if(hi>=maxN){ hi=null; break; } hi=Math.min(maxN,hi*2); if(tok!==APP.planTok) return; } }
+  if(tok!==APP.planTok) return;
+  if(hi!=null){ while(hi-lo>1){ const mid=Math.floor((lo+hi)/2); if(await metric(mid).then(good)) hi=mid; else lo=mid; if(tok!==APP.planTok) return; } found=Math.max(minN,hi); }
+  const n0=P.n0, v0=await metric(n0), uw=esc(P.unitWord), fmtN=v=>fnum(v,1);
+  const tgtTxt=isM?`un margen de ${P.fmt(target)}`:`detectarlo el ${pct0(target)} de las veces`;
+  let h='';
+  if(found==null) h=`<p class="v-text">Harían falta más de <b>${fmtInt(maxN)}</b> ${uw} para ${tgtTxt}. El efecto es tan pequeño que no compensa medirlo así.</p>`;
+  else if(good(v0)) h=`<div class="plan-top"><span class="plan-n">✓</span><p class="v-text" style="margin:0">Con tus <b>${fmtN(n0)}</b> ${uw} ya consigues ${tgtTxt} (${isM?P.fmt(v0):pct(v0)}). Te habría bastado con <b>${fmtInt(found)}</b>.</p></div>`;
+  else h=`<div class="plan-top"><div><div class="v-kicker" style="color:var(--muted)">Para ${tgtTxt} necesitarías</div><span class="plan-n">${fmtInt(found)}</span> <b>${uw}</b></div><p class="v-text" style="margin:0;flex:1;min-width:220px">Tienes ${fmtN(n0)}: te ${found-n0>1?'faltan':'falta'} <b>${fmtInt(Math.ceil(found-n0))}</b>. ${isM?'':`Ahora mismo tu probabilidad de detectarlo es del ${pct(v0)}.`}</p></div>`;
+  if(!isM) h+=`<div class="pills" style="margin:4px 0 6px"><span style="color:var(--muted);font-size:14px;align-self:center;margin-right:4px">Potencia deseada:</span>${[0.8,0.9,0.95].map(p=>`<button type="button" class="pill${Math.abs(APP.st.power-p)<1e-9?' on':''}" data-pow="${p}">${pct0(p)}</button>`).join('')}</div>`;
+  head.innerHTML=h;
+  $('planNote').innerHTML=isM?'El margen se calcula con el mismo método exacto que tu intervalo, suponiendo que la proporción o dispersión se mantiene.'
+    :'Suponiendo que la verdad es lo que has observado. '+(P.metric?'Potencia exacta.':'Potencia estimada por simulación (Monte Carlo), por eso la curva puede tener pequeños altibajos.');
+  // curva
+  const xmax=Math.max(minN+4,Math.ceil(Math.max(found||0,n0)*1.8)), pts=[], K=22;
+  for(let i=0;i<=K;i++){ const N=Math.round(minN+(xmax-minN)*i/K); if(pts.length&&pts[pts.length-1].n===N) continue; pts.push({n:N,v:await metric(N,P.metric?600:300)}); if(tok!==APP.planTok) return; }
+  APP.plan={pts,found,n0,isM,target,P,xmax,minN,metric};
+  const sl=$('planN'); sl.min=minN; sl.max=xmax; sl.value=Math.round(n0); planSlider(); drawPlan();
+}
+$('planHead').addEventListener('click',e=>{ const b=e.target.closest('[data-pow]'); if(!b) return; APP.st.power=+b.dataset.pow; runPlan(); });
+let planT=null;
+async function planSlider(){ if(!APP.plan) return; const N=+$('planN').value, {metric,isM,P}=APP.plan; const v=await metric(N,P.metric?600:400);
+  $('planOut').innerHTML=`${fmtInt(N)} ${esc(P.unitWord)} → <b style="color:var(--accent)">${isM?P.fmt(v):'potencia '+pct(v)}</b>`; APP.plan.cur={n:N,v}; drawPlan(); }
+$('planN').addEventListener('input',()=>{ clearTimeout(planT); planT=setTimeout(planSlider,80); });
+function drawPlan(){
+  const Pl=APP.plan; if(!Pl) return; const box=$('planChart'), W=Math.max(300,box.clientWidth||600), H=240, m={l:54,r:16,t:16,b:36};
+  const ys=Pl.pts.map(p=>p.v); let y0=0,y1=Pl.isM?Math.max(...ys,Pl.target)*1.1:1;
+  const x=v=>m.l+(v-Pl.minN)/(Pl.xmax-Pl.minN)*(W-m.l-m.r), y=v=>H-m.b-(v-y0)/(y1-y0)*(H-m.t-m.b), fy=v=>Pl.isM?Pl.P.fmt(v).replace('±',''):pct0(v);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+  for(let i=0;i<=4;i++){ const v=y0+(y1-y0)*i/4; s+=`<line class="gl" x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}"/><text class="tk" x="${m.l-6}" y="${y(v)+4}" text-anchor="end">${fy(v)}</text>`; }
+  for(let i=0;i<=5;i++){ const v=Pl.minN+(Pl.xmax-Pl.minN)*i/5; s+=`<text class="tk" x="${x(v)}" y="${H-m.b+16}" text-anchor="middle">${fmtInt(v)}</text>`; }
+  s+=`<text class="tk" x="${(m.l+W-m.r)/2}" y="${H-2}" text-anchor="middle">${esc(Pl.P.unitWord)}</text>`;
+  s+=`<rect x="${m.l}" y="${Pl.isM?y(Pl.target):y(1)}" width="${W-m.l-m.r}" height="${Pl.isM?y(0)-y(Pl.target):y(Pl.target)-y(1)}" fill="var(--green)" opacity=".08"/>`;
+  s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(Pl.target)}" y2="${y(Pl.target)}" stroke="var(--green)" stroke-width="1.6" stroke-dasharray="6 4"/><text class="lb" x="${W-m.r}" y="${y(Pl.target)-6}" text-anchor="end" style="fill:var(--green)">zona verde</text>`;
+  let d=''; Pl.pts.forEach((p,i)=>{ d+=(i?'L':'M')+x(p.n).toFixed(1)+','+y(p.v).toFixed(1); });
+  s+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const mk=(n,label,color)=>{ if(n<Pl.minN||n>Pl.xmax) return ''; return `<line x1="${x(n)}" x2="${x(n)}" y1="${m.t}" y2="${y(y0)}" stroke="${color}" stroke-width="1.4"/><text class="lb" x="${x(n)+5}" y="${m.t+12}" style="fill:${color}">${label}</text>`; };
+  s+=mk(Pl.n0,'tú','var(--coral)'); if(Pl.found!=null&&Math.abs(Pl.found-Pl.n0)>=(Pl.xmax-Pl.minN)*0.06) s+=mk(Pl.found,fmtInt(Pl.found),'var(--green)');
+  if(Pl.cur) s+=`<circle cx="${x(Pl.cur.n)}" cy="${y(Math.min(y1,Pl.cur.v))}" r="7" fill="var(--card)" stroke="var(--accent)" stroke-width="3"/>`;
+  box.innerHTML=s+'</svg>';
+}
+
+/* ---------- Modo avanzado ---------- */
+function renderAdv(R){
+  $('advTest').textContent=R.adv.test; const box=$('formulas'); box.innerHTML='';
+  for(const [txt,src] of R.adv.formulas){ const d=el('div',{class:'formula'}); d.innerHTML=`<p>${txt}</p><div></div>`; const t=d.lastChild;
+    if(window.katex) katex.render(src,t,{displayMode:true,throwOnError:false}); else t.innerHTML=`<code>${esc(src)}</code>`; box.appendChild(d); }
+  $('advTable').innerHTML=R.adv.rows.concat([['α (límite de falso positivo)',pct(APP.st.alpha,1)]]).map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+}
+$('advToggle').addEventListener('change',e=>{ document.body.classList.toggle('advanced',e.target.checked); if(APP.R&&!APP.R.error) renderAdv(APP.R); });
+window.addEventListener('load',()=>{ if(APP.R&&!APP.R.error) renderAdv(APP.R); });
+
+/* ---------- Varios ---------- */
+(function confetti(){ const c=$('confetti'), cols=['var(--accent)','var(--coral)','var(--sun)','var(--green)']; const rng=mulberry32(7);
+  for(let i=0;i<22;i++){ const s=6+rng()*16, e=document.createElement('i'); e.style.cssText=`width:${s}px;height:${s}px;left:${i%2?rng()*16:84+rng()*16}%;top:${rng()*100}%;background:${cols[i%4]};animation-delay:${-rng()*9}s;animation-duration:${7+rng()*6}s`; c.appendChild(e); } })();
+let rz=null; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(APP.R&&!APP.R.error){ runSim(); drawPlan(); } },200); });
+renderTypes();
+</script>
+</body>
+</html>
