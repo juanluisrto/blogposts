@@ -63,6 +63,80 @@ input,textarea,select{font:inherit;color:var(--ink)}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
 @media (prefers-reduced-motion: reduce){.confetti i{animation:none}}
 
+/* ---------- Historia ---------- */
+.kick{font-size:13px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--coral);margin-bottom:10px}
+.cta{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.btn-main,.btn-ghost{padding:12px 20px;border-radius:14px;font-weight:700;text-decoration:none;transition:transform .2s cubic-bezier(.5,1.6,.4,1)}
+.btn-main{background:var(--ink);color:var(--bg)} .btn-ghost{border:2px solid var(--line);color:var(--ink)}
+.btn-main:hover,.btn-ghost:hover{transform:translateY(-3px)}
+.scene{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:30px;align-items:center;margin-top:80px;scroll-margin-top:20px}
+.scene.solo{display:block}
+@media (max-width:860px){.scene{grid-template-columns:1fr;margin-top:56px}}
+.chapter{font-family:Fraunces,Georgia,serif;font-size:15px;color:var(--accent);font-weight:700}
+.scene h2,.calc-intro h2{font-size:clamp(28px,4.2vw,42px);line-height:1.08;margin:6px 0 14px;font-weight:800}
+.scene p{font-size:17px;margin:0 0 12px}
+.aside{background:var(--soft2);border-radius:14px;padding:12px 16px;font-size:15.5px;margin-top:6px}
+.slider-big{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-weight:600;font-size:14.5px;margin-bottom:14px}
+.slider-big input{flex:1;min-width:150px;accent-color:var(--accent)}
+.big-out{font-family:Fraunces,Georgia,serif;font-size:28px;font-weight:800;color:var(--accent);min-width:70px;text-align:right;font-variant-numeric:tabular-nums}
+.sq-grid{display:flex;flex-wrap:wrap;gap:3px;min-height:20px}
+.sq-grid i{width:12px;height:12px;border-radius:3px;background:var(--dot);animation:pop .35s cubic-bezier(.5,1.8,.4,1) both}
+.sq-grid i.y{background:var(--accent)}
+.sq-cap{font-size:12.5px;color:var(--muted);margin:6px 0 4px}
+.scene-out{font-size:16.5px;margin-top:10px}
+.scene-big{margin:4px 0 2px}
+.mini-light{display:inline-flex;gap:4px;background:var(--ink);padding:4px 6px;border-radius:10px;vertical-align:-3px;margin-right:6px}
+.mini-light b{width:12px;height:12px;border-radius:50%;background:#3b384d}
+.mini-light b.on.r{background:var(--red);box-shadow:0 0 8px var(--red)} .mini-light b.on.a{background:var(--amber);box-shadow:0 0 8px var(--amber)} .mini-light b.on.g{background:var(--green);box-shadow:0 0 8px var(--green)}
+.survey-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:5px}
+.survey-grid i{aspect-ratio:1;border-radius:50%;background:var(--dot);animation:pop .35s cubic-bezier(.5,1.8,.4,1) both}
+.survey-grid i.hit{background:var(--coral)}
+.levers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+@media (max-width:760px){.levers{grid-template-columns:1fr}}
+.lever{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px}
+.lever-i{font-size:30px} .lever b{font-family:Fraunces,Georgia,serif;font-size:19px} .lever span:last-child{color:var(--muted);font-size:14.5px}
+.ex-h{font-family:Fraunces,Georgia,serif;font-size:22px;margin:34px 0 14px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.excards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:960px){.excards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.excards{grid-template-columns:1fr}}
+.excard{text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;transition:transform .25s cubic-bezier(.5,1.6,.4,1),border-color .2s}
+.excard:hover{transform:translateY(-4px) rotate(.5deg);border-color:var(--accent)}
+.excard .ico{width:44px;height:44px}
+.excard .q{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:17px;line-height:1.2}
+.excard .dat{font-size:13.5px;color:var(--muted)}
+.excard .res{font-size:14px;font-weight:600;margin-top:auto;padding-top:6px}
+.excard .go{font-size:13.5px;color:var(--accent);font-weight:700}
+.calc-intro{margin-top:90px;text-align:center;padding-top:44px;border-top:2px dashed var(--line);scroll-margin-top:10px}
+.calc-intro p{color:var(--muted);max-width:640px;margin:0 auto;font-size:17px}
+
+
+.levers.two{grid-template-columns:repeat(2,1fr)} @media (max-width:760px){.levers.two{grid-template-columns:1fr}}
+.hypcard{border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:4px;border:2px solid var(--line)}
+.hypcard b{font-family:Fraunces,Georgia,serif;font-size:19px;line-height:1.25}
+.hypcard span:last-child{color:var(--muted);font-size:14px}
+.hypcard.h0{background:var(--soft)} .hypcard.h1{background:var(--soft2);border-color:var(--accent)}
+.hyp-tag{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hypcard.h1 .hyp-tag{color:var(--accent)}
+.errs{display:grid;grid-template-columns:1fr 1fr;gap:10px} @media (max-width:520px){.errs{grid-template-columns:1fr}}
+.errs div{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:14px;display:flex;flex-direction:column;gap:2px}
+ol.steps{padding-left:0;list-style:none;counter-reset:st;margin:6px 0 10px}
+ol.steps li{counter-increment:st;position:relative;padding-left:40px;margin:0 0 12px;font-size:16px}
+ol.steps li::before{content:counter(st);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:14px}
+.calcbox{margin-top:14px;background:var(--soft);border-radius:14px;padding:12px 14px;font-size:14.5px;line-height:1.55}
+.calcbox .eq{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.meter{position:relative;height:14px;background:var(--soft);border-radius:8px;margin-top:10px;overflow:visible}
+.meter-bar{height:100%;border-radius:8px;transition:width .3s,background .3s}
+.meter-target{position:absolute;left:80%;top:-5px;bottom:-5px;width:3px;background:var(--ink);border-radius:2px}
+.meter-target::after{content:"80 %";position:absolute;top:-18px;left:-10px;font-size:11px;color:var(--muted);font-weight:700}
+.scene.mini{margin-top:56px}
+.scene.mini h2{font-size:clamp(24px,3.2vw,32px)}
+.btn-ghost.open{display:inline-block;margin-top:12px;background:none;font:inherit;font-weight:700;cursor:pointer}
+.hyp{display:grid;gap:6px;margin-bottom:12px;font-size:14.5px}
+.hyp div{display:flex;gap:8px;align-items:baseline}
+.htag{flex:none;font-weight:800;font-size:12px;border-radius:6px;padding:2px 7px;background:var(--soft);color:var(--muted)}
+.htag.h1{background:var(--soft2);color:var(--accent)}
+.decision{display:inline-block;font-weight:700;border-radius:999px;padding:5px 12px;margin:-2px 0 12px;font-size:14.5px}
+.decision.yes{background:var(--green-bg);color:var(--green)} .decision.no{background:var(--soft);color:var(--muted)}
 /* ---------- Steps ---------- */
 .step{margin-top:34px}
 .step-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
@@ -202,8 +276,232 @@ footer{margin-top:50px;color:var(--muted);font-size:13.5px;text-align:center}
 
   <section class="hero">
     <div class="confetti" id="confetti"></div>
-    <h1>¿Me puedo fiar<br>de <em>mis datos</em>?</h1>
-    <p>Cuéntame qué has medido, mete cuatro números y te digo cómo de sólida es tu conclusión, qué pasaría si repitieras el estudio y cuántos datos te harían falta.</p>
+    <div class="kick">La pregunta de siempre</div>
+    <h1>¿Es <em>representativa</em><br>mi muestra?</h1>
+    <p>Hemos preguntado a 140 empresas y el 60 % dice que no quiere externalizar. ¿Es suficiente para afirmar que <b>a la mayoría no le gusta externalizar</b>? Para responder hay que separar dos preguntas y hacer un poco de estadística. Te la cuento con ejemplos que puedes tocar, y al final la pruebas con tus datos.</p>
+    <div class="cta"><a class="btn-main" href="#sc0">↓ Empieza la historia</a><a class="btn-ghost" href="#calc">Ir a la calculadora</a></div>
+  </section>
+
+  <!-- ===================== Historia ===================== -->
+  <section class="scene solo" id="sc0">
+    <div class="chapter">Antes de empezar</div>
+    <h2>Dos maneras de que una muestra no represente</h2>
+    <div class="levers two">
+      <div class="lever"><span class="lever-i">🎯</span><b>¿A quién preguntaste? — el sesgo</b><span>Si solo encuestas a clientes contentos, o a quien contesta en LinkedIn, da igual que sean 10 o 10.000: la muestra no se parece a la población. <b>Esto no lo arregla ningún tamaño</b>; se arregla eligiendo bien a quién preguntas, al azar y sin filtros.</span></div>
+      <div class="lever"><span class="lever-i">🎲</span><b>¿A cuántos? — el azar</b><span>Aunque elijas bien, cada muestra sale un poco distinta por pura casualidad. <b>Cuánto puede engañarte el azar sí se puede calcular</b>, y de eso va esta página: cuántos datos hacen falta para que el azar no te haga cambiar de conclusión.</span></div>
+    </div>
+  </section>
+
+  <section class="scene" id="scH">
+    <div>
+      <div class="chapter">Capítulo 1</div>
+      <h2>Primero, la hipótesis</h2>
+      <p>Antes de mirar los datos hay que decir <b>qué queremos demostrar</b>. En estadística se hace enfrentando dos hipótesis.</p>
+      <p>Funciona como un juicio: H₀ es «inocente» mientras no haya pruebas. Solo la abandonamos si los datos la hacen muy difícil de creer.</p>
+      <div class="aside">Ojo: lo que quieres demostrar va en <b>H₁</b>, no en H₀. Los datos nunca «demuestran» H₀; como mucho, no consiguen tumbarla.</div>
+    </div>
+    <div class="card">
+      <div class="hypcard h0"><span class="hyp-tag">H₀ · la hipótesis del escéptico</span><b>No hay mayoría: como mucho el 50 % de las empresas no quiere externalizar.</b><span>La damos por buena mientras no haya pruebas en contra.</span></div>
+      <div class="hypcard h1"><span class="hyp-tag">H₁ · lo que quieres demostrar</span><b>La mayoría (más del 50 %) de las empresas no quiere externalizar.</b><span>Solo nos quedamos con ella si los datos hacen H₀ muy improbable.</span></div>
+      <h3 style="margin-top:18px">Dos formas de equivocarse</h3>
+      <div class="errs">
+        <div><b style="color:var(--red)">Falso positivo (α)</b><span>Quedarte con H₁ cuando la verdad era H₀. Es el error que más te preocupa: lo limitamos a un <b>5 %</b>.</span></div>
+        <div><b style="color:var(--amber)">Falso negativo (β)</b><span>Quedarte con H₀ cuando H₁ era verdad. Queremos que pase como mucho un 20 %, es decir, <b>potencia del 80 %</b>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="sc1">
+    <div>
+      <div class="chapter">Capítulo 2</div>
+      <h2>El mismo 60 %, conclusiones muy distintas</h2>
+      <p>Preguntamos y el <b>60 %</b> dice que no quiere externalizar. ¿Basta para tumbar H₀ y quedarnos con H₁?</p>
+      <p>Mueve el deslizador para cambiar a cuántas empresas hemos preguntado.</p>
+      <div class="aside">El 60 % no se mueve. Lo que cambia es el <b>rango plausible</b>: los porcentajes reales que encajan con lo que has visto. Si el 50 % (H₀) queda fuera del rango, puedes rechazar H₀.</div>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Empresas encuestadas</span><input type="range" id="sc1N" min="0" max="12" value="1"><output class="big-out" id="sc1Out"></output></div>
+      <div class="sq-grid" id="sc1Grid"></div>
+      <div class="sq-cap" id="sc1Cap"></div>
+      <div class="chart" id="sc1Bar"></div>
+      <div class="scene-out" id="sc1Text"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="scI">
+    <div>
+      <div class="chapter">Capítulo 3 · Bajo el capó</div>
+      <h2>¿De dónde sale ese rango?</h2>
+      <p>No sabemos el porcentaje real, pero podemos <b>probar candidatos</b> uno a uno:</p>
+      <ol class="steps">
+        <li><b>Supón una verdad.</b> Por ejemplo, que en realidad el 30 % no quiere externalizar.</li>
+        <li><b>Calcula qué resultados daría.</b> Encuestar a N empresas es como lanzar N monedas trucadas. La gráfica muestra la probabilidad exacta de cada resultado.</li>
+        <li><b>¿Es raro lo que tú viste?</b> Si un resultado como el tuyo, o más extremo, saldría menos de un 5 % de las veces, <b>descartas</b> ese candidato.</li>
+        <li><b>Repite con todos.</b> Los que sobreviven forman el rango plausible.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="pills" id="scIPills" style="margin-bottom:10px"></div>
+      <div class="slider-big"><span>Candidato a «porcentaje real»</span><input type="range" id="scIP" min="1" max="99" value="30"><output class="big-out" id="scIOut"></output></div>
+      <div class="chart" id="scIChart"></div>
+      <div class="scene-out" id="scIText"></div>
+      <div class="chart" id="scIStrip" style="margin-top:12px"></div>
+      <button class="runbtn" id="scIRun" style="margin-top:8px">▶ Probar todos los candidatos</button>
+      <div class="calcbox" id="scICalc"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="sc3">
+    <div>
+      <div class="chapter">Capítulo 4</div>
+      <h2>El azar también responde encuestas</h2>
+      <p>Supón que <b>H₀ es verdad</b>: hay empate, mitad y mitad, y no hay mayoría. Si preguntas a pocas empresas, muchas veces verás un 60 % o más solo por casualidad.</p>
+      <p>Cada punto es una encuesta repetida. En coral, las que te habrían hecho creer en H₁.</p>
+      <div class="aside">Es el <b>falso positivo</b>. La regla de decisión del capítulo 6 se ajusta para que esto no pase más de un 5 % de las veces.</div>
+    </div>
+    <div class="card">
+      <div class="pills" id="sc3Pills" style="margin-bottom:12px"></div>
+      <div class="survey-grid" id="sc3Grid"></div>
+      <div class="scene-out" id="sc3Text"></div>
+      <button class="runbtn" id="sc3Run" style="margin-top:6px">▶ Repetir las 100 encuestas</button>
+    </div>
+  </section>
+
+  <section class="scene" id="sc2">
+    <div>
+      <div class="chapter">Capítulo 5</div>
+      <h2>Cuanto más ajustado, más datos</h2>
+      <p>La pregunta sigue siendo H₁: ¿es mayoría? Ahora cambia lo que ocurre <b>en realidad</b>.</p>
+      <p>Si la verdad está lejos del 50 %, se nota enseguida. Si está cerca, separarla del azar cuesta muchísimo más.</p>
+      <div class="aside" id="sc2Aside"></div>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Porcentaje real que no quiere externalizar</span><input type="range" id="sc2P" min="51" max="95" value="60"><output class="big-out" id="sc2Out"></output></div>
+      <div class="scene-big"><span class="plan-n" id="sc2N"></span> <b>empresas</b></div>
+      <div class="scene-out" id="sc2Text"></div>
+      <div class="chart" id="sc2Chart"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="scP">
+    <div>
+      <div class="chapter">Capítulo 6 · Bajo el capó</div>
+      <h2>¿Cómo se calcula cuántos datos hacen falta?</h2>
+      <ol class="steps">
+        <li><b>Fija la regla antes de mirar.</b> Con N empresas, ¿a partir de cuántos «no» rechazarás H₀? La línea se coloca de modo que, si H₀ fuera verdad (gris), solo la cruzarías un 5 % de las veces: ese trozo rojo es el <b>falso positivo</b>.</li>
+        <li><b>Mira qué pasa si H₁ es verdad.</b> Si en realidad es el 60 % (verde), ¿cuántas veces cruzarás la línea? Eso es la <b>potencia</b>.</li>
+        <li><b>Sube N</b> hasta que la parte verde que cruza la línea llegue al 80 %. Con más datos, las dos campanas se estrechan y se separan.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <div class="pills" id="scPPills" style="margin-bottom:10px"></div>
+      <div class="slider-big"><span>Empresas encuestadas</span><input type="range" id="scPN" min="10" max="800" value="50"><output class="big-out" id="scPOut"></output></div>
+      <div class="legend" style="margin:0 0 4px"><span><i style="background:var(--dot)"></i>si H₀ es verdad (50 %)</span><span><i style="background:var(--green)"></i>si H₁ es verdad</span><span><i style="background:var(--red)"></i>falso positivo</span></div>
+      <div class="chart" id="scPChart"></div>
+      <div class="scene-out" id="scPText"></div>
+      <div class="meter"><div class="meter-bar" id="scPBar"></div><div class="meter-target"></div></div>
+      <button class="btn-ghost" id="scPGo" style="margin-top:12px;cursor:pointer;background:none;font:inherit;font-weight:700"></button>
+    </div>
+  </section>
+
+  <section class="scene solo" id="scX">
+    <div class="chapter">Capítulo 7</div>
+    <h2>Más allá del sí/no</h2>
+    <p style="max-width:720px">Hasta ahora cada dato era un sí o un no. Pero también medimos números, contamos sucesos o elegimos entre varias opciones, y a veces comparamos grupos o las mismas empresas antes y después. La lógica es la misma (H₀, H₁, azar, potencia), pero cada caso tiene sus trucos.</p>
+  </section>
+
+  <section class="scene mini" id="m1">
+    <div>
+      <div class="chapter">7a · Un número</div>
+      <h2>El gasto medio: la dispersión manda</h2>
+      <p>Si cada empresa te da una cifra (gasto mensual en TI), lo que importa no es solo cuántas son, sino <b>cuánto se parecen entre sí</b>.</p>
+      <div class="aside">El margen de la media es aproximadamente <b>2 × dispersión ÷ √n</b>. Si duplicas la dispersión, necesitas cuatro veces más empresas para la misma precisión.</div>
+      <button class="btn-ghost open" data-open="num-est">Pruébalo en la calculadora →</button>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Empresas</span><input type="range" id="m1N" min="3" max="200" value="20"><output class="big-out" id="m1NOut"></output></div>
+      <div class="slider-big"><span>Dispersión (desviación típica)</span><input type="range" id="m1S" min="1" max="8" step="0.5" value="3"><output class="big-out" id="m1SOut"></output></div>
+      <div class="chart" id="m1Chart"></div>
+      <div class="scene-out" id="m1Text"></div>
+    </div>
+  </section>
+
+  <section class="scene mini" id="m2">
+    <div>
+      <div class="chapter">7b · Un conteo</div>
+      <h2>Incidencias: lo que cuenta son los sucesos</h2>
+      <p>Tenemos unas 7,8 incidencias al mes. ¿Cuánto tiempo hay que observar para saber la tasa real?</p>
+      <div class="aside">En los conteos la precisión depende de <b>cuántos sucesos has visto</b>, no del calendario. El margen relativo es ≈ 2 ÷ √sucesos: con 25 sucesos, ±40 %; con 100, ±20 %; con 400, ±10 %.</div>
+      <button class="btn-ghost open" data-open="cnt-est">Pruébalo en la calculadora →</button>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Meses observados</span><input type="range" id="m2T" min="1" max="36" value="6"><output class="big-out" id="m2Out"></output></div>
+      <div class="sq-grid" id="m2Dots"></div>
+      <div class="chart" id="m2Chart"></div>
+      <div class="scene-out" id="m2Text"></div>
+    </div>
+  </section>
+
+  <section class="scene mini" id="m3">
+    <div>
+      <div class="chapter">7c · Dos grupos</div>
+      <h2>España frente a Portugal: comparar cuesta más</h2>
+      <p><b>H₀:</b> en los dos países el porcentaje que no quiere externalizar es el mismo. <b>H₁:</b> es distinto. Vemos un 60 % frente a un 47 %.</p>
+      <div class="aside">Cada grupo trae <b>su propio ruido</b>, y al comparar los dos ruidos se suman. Por eso detectar una diferencia entre dos grupos exige más datos que comparar un solo grupo con un umbral fijo.</div>
+      <button class="btn-ghost open" data-open="bin-two">Pruébalo en la calculadora →</button>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Empresas por país</span><input type="range" id="m3N" min="20" max="600" step="10" value="60"><output class="big-out" id="m3Out"></output></div>
+      <div class="chart" id="m3Chart"></div>
+      <div class="scene-out" id="m3Text"></div>
+    </div>
+  </section>
+
+  <section class="scene mini" id="m4">
+    <div>
+      <div class="chapter">7d · Antes y después</div>
+      <h2>Las mismas empresas: menos ruido</h2>
+      <p>Medimos el gasto de 16 empresas antes y después de un cambio. <b>H₀:</b> el gasto no ha cambiado. <b>H₁:</b> sí ha cambiado.</p>
+      <div class="aside">Cada empresa es <b>su propio control</b>: las diferencias entre empresas (unas gastan mucho y otras poco) desaparecen y solo queda el cambio. Con los mismos datos, analizarlos bien puede pasar de «no concluyente» a «clarísimo».</div>
+      <button class="btn-ghost open" data-open="num-pair">Pruébalo en la calculadora →</button>
+    </div>
+    <div class="card">
+      <div class="seg" id="m4Seg" style="margin-bottom:12px"><button data-m="ind">Como dos grupos distintos</button><button data-m="pair" class="on">Como las mismas empresas</button></div>
+      <div class="chart" id="m4Chart"></div>
+      <div class="scene-out" id="m4Text"></div>
+    </div>
+  </section>
+
+  <section class="scene mini" id="m5">
+    <div>
+      <div class="chapter">7e · Varias opciones</div>
+      <h2>¿Hay un ganador claro?</h2>
+      <p>140 empresas eligen proveedor. Gana A, pero ¿de verdad o por azar? <b>H₀:</b> A y B empatan. <b>H₁:</b> A es el preferido.</p>
+      <div class="aside">Para saber si A gana a B, las respuestas de C y D <b>no ayudan</b>: la comparación se decide solo entre quienes eligieron A o B.</div>
+      <button class="btn-ghost open" data-open="cat-thr">Pruébalo en la calculadora →</button>
+    </div>
+    <div class="card">
+      <div class="slider-big"><span>Tamaño de la encuesta</span><input type="range" id="m5K" min="1" max="8" value="1"><output class="big-out" id="m5Out"></output></div>
+      <div id="m5Chart"></div>
+      <div class="scene-out" id="m5Text"></div>
+    </div>
+  </section>
+
+  <section class="scene solo" id="sc4">
+    <div class="chapter">Para terminar</div>
+    <h2>No existe un número mágico</h2>
+    <p style="max-width:720px">«¿Es representativa mi muestra?» tiene dos partes: que no esté sesgada y que sea lo bastante grande. Para la segunda, el tamaño que necesitas depende de tres palancas:</p>
+    <div class="levers">
+      <div class="lever"><span class="lever-i">🧩</span><b>Qué mides</b><span>Un sí/no, un número, un conteo o una categoría; un grupo, dos, o los mismos antes y después.</span></div>
+      <div class="lever"><span class="lever-i">📏</span><b>Lo ajustado que está</b><span>Cuanto más cerca esté H₁ de H₀, más datos. La mitad de distancia exige unas cuatro veces más.</span></div>
+      <div class="lever"><span class="lever-i">🎲</span><b>El riesgo que aceptas</b><span>Menos falsos positivos (α) o más potencia implican más datos.</span></div>
+    </div>
+  </section>
+
+  <section class="calc-intro" id="calc">
+    <div class="kick">La calculadora</div>
+    <h2>Ahora, con tus datos</h2>
+    <p>Tres pasos: qué tipo de dato tienes, qué quieres saber y tus números. Te digo si te puedes fiar, qué pasaría si repitieras el estudio y cuántos datos te harían falta. ¿No sabes por dónde empezar? Cada historia de arriba tiene un botón para abrirla aquí con sus datos.</p>
   </section>
 
   <section class="step" id="s1">
@@ -1169,7 +1467,7 @@ function renderSettings(c,d){
   if(c.settings.includes('alt')){
     const k=key(); if(!APP.alt[k]) APP.alt[k]=c.altDef; const p=el('div',{class:'pills'});
     const draw=()=>{ p.innerHTML=''; for(const [a,l] of Object.entries(c.alts)){ const b=el('button',{type:'button',class:'pill'+(APP.alt[k]===a?' on':'')},l); b.onclick=()=>{ APP.alt[k]=a; draw(); schedule(); }; p.appendChild(b); } };
-    draw(); box.appendChild(field('¿Qué quieres demostrar?','Decídelo antes de mirar los datos. Si solo te importa una dirección, el test es más potente.',p));
+    draw(); box.appendChild(field('¿Qué quieres demostrar? (H₁)','Decídelo antes de mirar los datos. Si solo te importa una dirección, el test es más potente.',p));
   }
   if(c.settings.includes('margin')){
     const u=typeof c.marginUnit==='function'?c.marginUnit(d):c.marginUnit; const w=el('div',{style:'display:flex;align-items:center;gap:8px'});
@@ -1356,6 +1654,239 @@ window.addEventListener('load',()=>{ if(APP.R&&!APP.R.error) renderAdv(APP.R); }
   for(let i=0;i<22;i++){ const s=6+rng()*16, e=document.createElement('i'); e.style.cssText=`width:${s}px;height:${s}px;left:${i%2?rng()*16:84+rng()*16}%;top:${rng()*100}%;background:${cols[i%4]};animation-delay:${-rng()*9}s;animation-duration:${7+rng()*6}s`; c.appendChild(e); } })();
 let rz=null; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(APP.R&&!APP.R.error){ runSim(); drawPlan(); } },200); });
 renderTypes();
+</script>
+<script>
+/* =====================================================================
+   Historia
+   ===================================================================== */
+function lin(d0,d1,r0,r1){ return x=>r0+(x-d0)/(d1-d0||1)*(r1-r0); }
+function niceTicks(a,b,n=5){ const span=b-a; if(span<=0) return [a]; const s0=span/n, mag=Math.pow(10,Math.floor(Math.log10(s0))), r=s0/mag, step=(r<1.5?1:r<3?2:r<7?5:10)*mag, out=[]; for(let v=Math.ceil(a/step)*step; v<=b+step*1e-9; v+=step) out.push(+v.toFixed(10)); return out; }
+const miniLight=c=>`<span class="mini-light"><b class="r${c==='red'?' on':''}"></b><b class="a${c==='amber'?' on':''}"></b><b class="g${c==='green'?' on':''}"></b></span>`;
+const svgO=(W,H)=>`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+const cwid=id=>Math.max(280,$(id).clientWidth||500);
+const pillsHTML=(label,vals,cur,fmt,attr)=>`<span style="color:var(--muted);font-size:14px;align-self:center;margin-right:4px">${label}</span>`+vals.map(v=>`<button type="button" class="pill${v===cur?' on':''}" data-${attr}="${v}">${fmt(v)}</button>`).join('');
+function openCase(k){ const [t,g]=k.split('-'); APP.goal=null; pickType(t); pickGoal(g); }
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openCase(b.dataset.open)));
+function stepArea(f,a,b,N,x,y){ if(a>b) return ''; let s=`M${x((a-0.5)/N)},${y(0)}`; for(let k=a;k<=b;k++) s+=`L${x((k-0.5)/N)},${y(f[k])}L${x((k+0.5)/N)},${y(f[k])}`; return s+`L${x((b+0.5)/N)},${y(0)}Z`; }
+
+/* ---------- Capítulo 2: el mismo 60 % con distinto N ---------- */
+const SC1=[5,10,20,30,50,80,100,140,200,300,500,1000,2000];
+function sc1(){
+  const N=SC1[+$('sc1N').value], k=Math.round(0.6*N), ph=k/N;
+  $('sc1Out').textContent=fmtInt(N);
+  const per=N<=200?1:Math.ceil(N/200), cells=Math.ceil(N/per), yes=Math.round(k/per);
+  $('sc1Grid').innerHTML=Array.from({length:cells},(_,i)=>`<i class="${i<yes?'y':''}" style="animation-delay:${Math.min(i,120)*4}ms"></i>`).join('');
+  $('sc1Cap').innerHTML=`<span style="color:var(--accent)">■</span> no quieren externalizar (${fmtInt(k)}) · <span style="color:var(--dot)">■</span> sí (${fmtInt(N-k)})${per>1?` · cada cuadrado ≈ ${fmtInt(per)} empresas`:''}`;
+  const R=CASES['bin-thr'].analyze({unit:'empresas',label:'no quieren externalizar',n:N,k,p0:50},{alpha:0.05,alt:'gt'});
+  const lo=cpLower(N,k,0.05), hi=cpUpper(N,k,0.05), col=`var(--${R.color})`;
+  const W=cwid('sc1Bar'), H=86, x=v=>14+v*(W-28);
+  let s=svgO(W,H)+`<line class="ax" x1="14" x2="${W-14}" y1="52" y2="52"/>`;
+  for(const t of [0,.25,.75,1]) s+=`<text class="tk" x="${x(t)}" y="72" text-anchor="middle">${pct0(t)}</text>`;
+  s+=`<rect x="${x(lo)}" y="40" width="${x(hi)-x(lo)}" height="24" rx="12" fill="${col}" opacity=".28"/>`;
+  s+=`<line x1="${x(.5)}" x2="${x(.5)}" y1="18" y2="66" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/><text class="lb" x="${x(.5)}" y="13" text-anchor="middle">50 % (H₀)</text><text class="tk" x="${x(.5)}" y="80" text-anchor="middle">50 %</text>`;
+  s+=`<circle cx="${x(ph)}" cy="52" r="8" fill="${col}" stroke="var(--card)" stroke-width="3"/><text class="tk" x="${x(lo)}" y="34" text-anchor="middle">${pct0(lo)}</text><text class="tk" x="${x(hi)}" y="34" text-anchor="middle">${pct0(hi)}</text>`;
+  $('sc1Bar').innerHTML=s+'</svg><div class="sq-cap" style="text-align:center">rango plausible del porcentaje real (cada extremo deja fuera un 5 %)</div>';
+  const base=`Con ${fmtInt(N)} empresas, el porcentaje real podría estar entre el <b>${pct0(lo)}</b> y el <b>${pct0(hi)}</b>.`;
+  const t=R.color==='red'?`${base} El 50 % sigue dentro del rango: <b>no puedes rechazar H₀</b>.`
+    :R.color==='amber'?(R.sig?`${base} El 50 % queda fuera por muy poco: rechazas H₀, pero <b>por los pelos</b>.`:`${base} El 50 % está justo en el borde: <b>casi</b>, pero aún no puedes rechazar H₀.`)
+    :`${base} El 50 % queda claramente fuera: <b>rechazas H₀ y te quedas con H₁</b>.`;
+  $('sc1Text').innerHTML=miniLight(R.color)+t;
+}
+$('sc1N').addEventListener('input',sc1);
+
+/* ---------- Capítulo 3: de dónde sale el rango ---------- */
+let scIN=10;
+function plaus(N,k,p,a){ const ph=k/N; if(Math.abs(p-ph)<1e-9) return {tail:1,side:0,ok:true}; if(p<ph){ const t=binomUpper(N,k,p); return {tail:t,side:1,ok:t>=a}; } const t=binomLower(N,k,p); return {tail:t,side:-1,ok:t>=a}; }
+function sciFmt(lc){ const l10=lc/Math.LN10; if(l10<7) return fmtInt(Math.exp(lc)); const e=Math.floor(l10); return `${(10**(l10-e)).toLocaleString('es-ES',{maximumFractionDigits:2})}·10<sup>${e}</sup>`; }
+function scI(){
+  const N=scIN, k=Math.round(0.6*N), p=+$('scIP').value/100, f=binomPMF(N,p), P=plaus(N,k,p,0.05);
+  $('scIPills').innerHTML=pillsHTML('Resultado observado:',[10,30,140],N,v=>`${Math.round(.6*v)} de ${v}`,'n');
+  $('scIOut').textContent=pct0(p);
+  const W=cwid('scIChart'), H=170, m={l:8,r:8,t:22,b:26}, bw=(W-m.l-m.r)/(N+1), mx=Math.max(...f)||1, y=v=>H-m.b-v/mx*(H-m.t-m.b);
+  let s=svgO(W,H);
+  for(let j=0;j<=N;j++){ const inT=P.side===1?j>=k:P.side===-1?j<=k:j===k; const c=inT?(P.ok?'var(--green)':'var(--red)'):'var(--dot)';
+    s+=`<rect x="${m.l+j*bw+bw*0.08}" y="${y(f[j])}" width="${Math.max(1,bw*0.84)}" height="${Math.max(0,y(0)-y(f[j]))}" rx="${Math.min(3,bw/4)}" fill="${c}"/>`; }
+  const xk=m.l+(k+0.5)*bw; s+=`<line x1="${xk}" x2="${xk}" y1="${m.t-6}" y2="${y(0)}" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="3 3"/><text class="lb" x="${xk}" y="${m.t-9}" text-anchor="middle">tu resultado: ${k}</text>`;
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${y(0)}" y2="${y(0)}"/>`;
+  for(const q of [0,.5,1]) s+=`<text class="tk" x="${m.l+(q*N+0.5)*bw}" y="${H-8}" text-anchor="middle">${fmtInt(q*N)} de ${N}</text>`;
+  $('scIChart').innerHTML=s+'</svg>';
+  const res=P.side===0?`Este candidato coincide con lo que viste, así que es plausible seguro.`
+    :`Si la verdad fuera el <b>${pct0(p)}</b>, sacar <b>${k} ${P.side===1?'o más':'o menos'}</b> de ${N} pasaría un <b>${pct(P.tail)}</b> de las veces. `+(P.ok?`Es más del 5 %: el ${pct0(p)} es <b style="color:var(--green)">plausible</b>.`:`Es menos del 5 %: <b style="color:var(--red)">descartamos el ${pct0(p)}</b>.`);
+  $('scIText').innerHTML=res;
+  // tira de candidatos
+  const W2=cwid('scIStrip'), H2=64, x=v=>10+v*(W2-20), lo=cpLower(N,k,0.05), hi=cpUpper(N,k,0.05);
+  let t=svgO(W2,H2);
+  for(let c=1;c<=99;c++){ const ok=plaus(N,k,c/100,0.05).ok; t+=`<rect x="${x((c-0.5)/100)}" y="20" width="${Math.max(1,x(1/100)-x(0)-1)}" height="18" rx="2" fill="${ok?'var(--green)':'var(--red)'}" opacity="${ok?.8:.25}"/>`; }
+  t+=`<line x1="${x(.5)}" x2="${x(.5)}" y1="14" y2="44" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="3 3"/><text class="lb" x="${x(.5)}" y="10" text-anchor="middle">H₀: 50 %</text>`;
+  t+=`<path d="M${x(p)-6},58 L${x(p)},46 L${x(p)+6},58Z" fill="var(--ink)"/>`;
+  t+=`<text class="tk" x="${x(lo)}" y="60" text-anchor="end">${pct0(lo)}</text><text class="tk" x="${x(hi)}" y="60" text-anchor="start" dx="4">${pct0(hi)}</text>`;
+  $('scIStrip').innerHTML=t+'</svg>'+`<div class="sq-cap">Cada rayita es un candidato del 1 % al 99 %. <span style="color:var(--green)">■</span> plausible · <span style="color:var(--red);opacity:.6">■</span> descartado. El 50 % (H₀) ${plaus(N,k,.5,.05).ok?'<b>sobrevive</b>: con estos datos no puedes rechazar H₀.':'<b>queda descartado</b>: rechazas H₀.'}</div>`;
+  // la cuenta
+  const pk=f[k], pf=v=>v.toLocaleString('es-ES',{maximumFractionDigits:2});
+  $('scICalc').innerHTML=`<b>La cuenta.</b> La probabilidad de exactamente ${k} «no» entre ${N} es<br><span class="eq">C(${N}, ${k}) × ${pf(p)}<sup>${k}</sup> × ${pf(1-p)}<sup>${N-k}</sup> = ${sciFmt(lchoose(N,k))} × … = ${pct(pk,2)}</span>
+    C(${N}, ${k}) cuenta de cuántas maneras pueden repartirse los ${k} «no» entre las ${N} empresas; el resto es la probabilidad de cada una de esas maneras. ${P.side?`Sumando todos los resultados ${P.side===1?`de ${k} en adelante`:`hasta ${k}`} sale el ${pct(P.tail,2)}.`:''}
+    <span style="color:var(--muted)"> Es el método exacto de Clopper–Pearson; la calculadora hace lo mismo con tus datos.</span>`;
+}
+$('scIPills').addEventListener('click',e=>{ const b=e.target.closest('[data-n]'); if(b){ scIN=+b.dataset.n; scI(); } });
+$('scIP').addEventListener('input',scI);
+let scISweep=null;
+$('scIRun').addEventListener('click',()=>{ clearInterval(scISweep); let v=1; scISweep=setInterval(()=>{ $('scIP').value=v; scI(); v+=1; if(v>99){ clearInterval(scISweep); } },35); });
+
+/* ---------- Capítulo 4: el azar también responde ---------- */
+let sc3N=10;
+function sc3(){
+  $('sc3Pills').innerHTML=pillsHTML('Empresas por encuesta:',[10,30,140,500],sc3N,v=>v,'n');
+  const rng=mulberry32((Date.now()*7)>>>0), s=binomSampler(sc3N,0.5), thr=Math.ceil(0.6*sc3N-1e-9); let h=0, html='';
+  for(let i=0;i<100;i++){ const hit=s(rng)>=thr; h+=hit; html+=`<i class="${hit?'hit':''}" style="animation-delay:${i*12}ms"></i>`; }
+  $('sc3Grid').innerHTML=html;
+  $('sc3Text').innerHTML=`Preguntando a <b>${sc3N}</b> empresas, <b style="color:var(--coral)">${h} de cada 100</b> encuestas darían un 60 % o más aunque H₀ sea verdad. <span style="color:var(--muted)">(Probabilidad exacta: ${pct(binomUpper(sc3N,thr,0.5))}.)</span>`;
+}
+$('sc3Pills').addEventListener('click',e=>{ const b=e.target.closest('[data-n]'); if(b){ sc3N=+b.dataset.n; sc3(); } });
+$('sc3Run').addEventListener('click',sc3);
+
+/* ---------- Capítulo 5: cuanto más ajustado, más datos ---------- */
+const NN=new Map();
+function nNeeded(p1){ if(NN.has(p1)) return NN.get(p1); const f=N=>powerBin(N,0.5,p1,0.05,'gt')>=0.8; let lo=1,hi=4; while(!f(hi)){ lo=hi; hi*=2; } while(hi-lo>1){ const m=(lo+hi)>>1; if(f(m)) hi=m; else lo=m; } NN.set(p1,hi); return hi; }
+function sc2(){
+  const p=+$('sc2P').value/100, N=nNeeded(p);
+  $('sc2Out').textContent=pct0(p); $('sc2N').textContent=fmtInt(N);
+  $('sc2Text').innerHTML=`Si en realidad el <b>${pct0(p)}</b> no quiere externalizar, tendrías que preguntar a unas <b>${fmtInt(N)}</b> empresas para rechazar H₀ 8 de cada 10 veces (potencia del 80 %), con solo un 5 % de riesgo de falso positivo.`;
+  $('sc2Aside').innerHTML=`Del 60 % al 55 % hay la mitad de distancia al 50 %… y hacen falta <b>${fmtInt(nNeeded(.55))}</b> empresas en vez de <b>${fmtInt(nNeeded(.6))}</b>. En el capítulo 6 verás de dónde salen estos números.`;
+  const W=cwid('sc2Chart'), H=200, m={l:48,r:12,t:12,b:32}, ps=[]; for(let q=51;q<=95;q++) ps.push([q/100,nNeeded(q/100)]);
+  const x=v=>m.l+(v-.51)/(.95-.51)*(W-m.l-m.r), L1=Math.ceil(Math.log10(ps[0][1])), y=v=>H-m.b-Math.log10(v)/L1*(H-m.t-m.b);
+  let s=svgO(W,H);
+  for(let e=0;e<=L1;e++){ const v=10**e; s+=`<line class="gl" x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}"/><text class="tk" x="${m.l-6}" y="${y(v)+4}" text-anchor="end">${fmtInt(v)}</text>`; }
+  for(const q of [.55,.6,.7,.8,.9]) s+=`<text class="tk" x="${x(q)}" y="${H-m.b+16}" text-anchor="middle">${pct0(q)}</text>`;
+  s+=`<path d="${ps.map((q,i)=>(i?'L':'M')+x(q[0]).toFixed(1)+','+y(q[1]).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>`;
+  s+=`<circle cx="${x(p)}" cy="${y(N)}" r="8" fill="var(--coral)" stroke="var(--card)" stroke-width="3"/>`;
+  s+=`<text class="tk" x="${(m.l+W-m.r)/2}" y="${H-2}" text-anchor="middle">porcentaje real (escala de N logarítmica)</text>`;
+  $('sc2Chart').innerHTML=s+'</svg>';
+}
+$('sc2P').addEventListener('input',sc2);
+
+/* ---------- Capítulo 6: cómo se calcula N ---------- */
+let scPp=0.6;
+function scP(){
+  const N=+$('scPN').value, p=scPp, f0=binomPMF(N,0.5), f1=binomPMF(N,p), c=critBin(N,0.5,0.05,'gt'), kU=c.kU; let pw=0; for(let j=kU;j<=N;j++) pw+=f1[j];
+  $('scPPills').innerHTML=pillsHTML('Si en realidad (H₁) es el:',[0.55,0.6,0.7],p,v=>pct0(v),'p');
+  $('scPOut').textContent=fmtInt(N);
+  let mx=0; for(let j=0;j<=N;j++) mx=Math.max(mx,f0[j],f1[j]);
+  let a=0,b=N; const thr=mx*1e-3; while(a<N&&f0[a]<thr&&f1[a]<thr) a++; while(b>0&&f0[b]<thr&&f1[b]<thr) b--; a=Math.max(0,a-2); b=Math.min(N,b+2);
+  const W=cwid('scPChart'), H=190, m={l:8,r:8,t:24,b:26}, x=lin((a-0.5)/N,(b+0.5)/N,m.l,W-m.r), y=lin(0,mx*1.15,H-m.b,m.t);
+  let s=svgO(W,H);
+  s+=`<path d="${stepArea(f0,a,b,N,x,y)}" fill="var(--dot)" opacity=".9"/><path d="${stepArea(f1,a,b,N,x,y)}" fill="var(--green)" opacity=".25" stroke="var(--green)" stroke-width="1"/>`;
+  if(kU<=b){ s+=`<path d="${stepArea(f1,Math.max(kU,a),b,N,x,y)}" fill="var(--green)" opacity=".85"/><path d="${stepArea(f0,Math.max(kU,a),b,N,x,y)}" fill="var(--red)" opacity=".9"/>`;
+    const xc=x((kU-0.5)/N); s+=`<line x1="${xc}" x2="${xc}" y1="${m.t-10}" y2="${y(0)}" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/><text class="lb" x="${xc+5}" y="${m.t-12}">rechazas H₀ si ≥ ${pct(kU/N)}</text>`; }
+  s+=`<line class="ax" x1="${m.l}" x2="${W-m.r}" y1="${y(0)}" y2="${y(0)}"/>`;
+  for(const q of niceTicks((a-0.5)/N,(b+0.5)/N,4)) s+=`<text class="tk" x="${x(q)}" y="${H-8}" text-anchor="middle">${pct0(q)}</text>`;
+  $('scPChart').innerHTML=s+'</svg>';
+  $('scPText').innerHTML=`<b>Regla con ${fmtInt(N)} empresas:</b> rechazas H₀ si al menos <b>${fmtInt(kU)}</b> (${pct(kU/N)}) dicen que no. Falso positivo real: <b style="color:var(--red)">${pct(c.size)}</b>. Potencia: <b style="color:var(--green)">${pct(pw)}</b>.`+(pw>=0.8?' ✅ Ya llegas al 80 %.':' Aún no llegas al 80 %.');
+  const bar=$('scPBar'); bar.style.width=(100*pw).toFixed(1)+'%'; bar.style.background=pw>=0.8?'var(--green)':'var(--amber)';
+  const nn=nNeeded(p); $('scPGo').textContent=`Ir al mínimo: ${fmtInt(nn)} empresas`; $('scPGo').dataset.n=nn;
+}
+$('scPPills').addEventListener('click',e=>{ const b=e.target.closest('[data-p]'); if(b){ scPp=+b.dataset.p; scP(); } });
+$('scPN').addEventListener('input',scP);
+$('scPGo').addEventListener('click',()=>{ $('scPN').value=$('scPGo').dataset.n; scP(); });
+
+/* ---------- 7a: números ---------- */
+const Z200=(()=>{ const r=mulberry32(11), n=makeNorm(r); return Array.from({length:200},()=>[n(),r()]); })();
+function m1(){
+  const n=+$('m1N').value, S=+$('m1S').value, M=12; $('m1NOut').textContent=n; $('m1SOut').textContent=fnum(S,1);
+  const z=Z200.slice(0,n).map(v=>v[0]), mz=mean(z), sz=n>1?sdev(z):1, xs=z.map(v=>M+S*(v-mz)/sz), half=qt(0.975,n-1)*S/Math.sqrt(n);
+  const W=cwid('m1Chart'), H=130, x=v=>12+Math.max(0,Math.min(28,v))/28*(W-24);
+  let s=svgO(W,H)+`<line class="ax" x1="12" x2="${W-12}" y1="98" y2="98"/>`;
+  for(const t of [0,7,14,21,28]) s+=`<text class="tk" x="${x(t)}" y="114" text-anchor="middle">${t} k€</text>`;
+  xs.forEach((v,i)=>{ s+=`<circle cx="${x(v)}" cy="${14+Z200[i][1]*50}" r="4" fill="var(--accent)" opacity=".55"/>`; });
+  s+=`<rect x="${x(M-half)}" y="76" width="${Math.max(2,x(M+half)-x(M-half))}" height="16" rx="8" fill="var(--coral)" opacity=".35"/><line x1="${x(M)}" x2="${x(M)}" y1="70" y2="98" stroke="var(--coral)" stroke-width="3"/>`;
+  $('m1Chart').innerHTML=s+'</svg><div class="sq-cap">cada punto es una empresa · en coral, el rango plausible de la media (95 %)</div>';
+  $('m1Text').innerHTML=`Media de <b>12 k€ ± ${fnum(half)} k€</b>. Con el doble de dispersión harían falta unas <b>${fmtInt(4*n)}</b> empresas para lograr el mismo margen.`;
+}
+['m1N','m1S'].forEach(id=>$(id).addEventListener('input',m1));
+
+/* ---------- 7b: conteos ---------- */
+function m2(){
+  const T=+$('m2T').value, rate=7.8, k=Math.round(rate*T), lo=garLower(k,0.025)/T, hi=garUpper(k,0.025)/T; $('m2Out').textContent=T;
+  const per=k<=280?1:Math.ceil(k/280); $('m2Dots').innerHTML=Array.from({length:Math.ceil(k/per)},(_,i)=>`<i class="y" style="width:8px;height:8px;border-radius:50%;animation-delay:${Math.min(i,100)*3}ms"></i>`).join('');
+  const W=cwid('m2Chart'), H=70, x=v=>12+Math.min(16,v)/16*(W-24);
+  let s=svgO(W,H)+`<line class="ax" x1="12" x2="${W-12}" y1="36" y2="36"/>`;
+  for(const t of [0,4,8,12,16]) s+=`<text class="tk" x="${x(t)}" y="58" text-anchor="middle">${t}/mes</text>`;
+  s+=`<rect x="${x(lo)}" y="26" width="${x(hi)-x(lo)}" height="20" rx="10" fill="var(--accent)" opacity=".28"/><circle cx="${x(k/T)}" cy="36" r="7" fill="var(--accent)" stroke="var(--card)" stroke-width="3"/>`;
+  $('m2Chart').innerHTML=s+'</svg>';
+  $('m2Text').innerHTML=`En ${T} ${T===1?'mes':'meses'} has visto <b>${fmtInt(k)} incidencias</b>${per>1?` (cada punto ≈ ${per})`:''}: la tasa real está entre <b>${fnum(lo)}</b> y <b>${fnum(hi)}</b> al mes, un margen de <b>±${pct0((hi-lo)/2/(k/T))}</b>.`;
+}
+$('m2T').addEventListener('input',m2);
+
+/* ---------- 7c: dos grupos ---------- */
+let m3Need=null;
+function m3(){
+  const n=+$('m3N').value, kA=Math.round(0.6*n), kB=Math.round(0.47*n); $('m3Out').textContent=n;
+  const R=CASES['bin-two'].analyze({unit:'empresas',label:'no quieren externalizar',nameA:'España',nameB:'Portugal',nA:n,kA,nB:n,kB},{alpha:0.05,alt:'ne'});
+  const rows=[['España',kA,'var(--accent)'],['Portugal',kB,'var(--coral)']].map(([nm,k,c])=>({nm,k,c,lo:cpLower(n,k,0.025),hi:cpUpper(n,k,0.025)}));
+  const W=cwid('m3Chart'), H=110, L=80, x=v=>L+(v-0.2)/0.6*(W-L-14);
+  let s=svgO(W,H);
+  rows.forEach((r,i)=>{ const yy=24+i*34; s+=`<text class="lb" x="${L-10}" y="${yy+4}" text-anchor="end">${r.nm}</text><rect x="${x(r.lo)}" y="${yy-9}" width="${x(r.hi)-x(r.lo)}" height="18" rx="9" fill="${r.c}" opacity=".3"/><circle cx="${x(r.k/n)}" cy="${yy}" r="7" fill="${r.c}" stroke="var(--card)" stroke-width="3"/>`; });
+  s+=`<line class="ax" x1="${L}" x2="${W-14}" y1="86" y2="86"/>`; for(const t of [.2,.4,.5,.6,.8]) s+=`<text class="tk" x="${x(t)}" y="102" text-anchor="middle">${pct0(t)}</text>`;
+  $('m3Chart').innerHTML=s+'</svg>';
+  if(m3Need==null){ let lo=10,hi=40; while(powerFisher(hi,0.47,0.6,0.05,'ne')<0.8) { lo=hi; hi*=2; } while(hi-lo>1){ const m=(lo+hi)>>1; if(powerFisher(m,0.47,0.6,0.05,'ne')>=0.8) hi=m; else lo=m; } m3Need=hi; }
+  const p=fisherP(n,kA,n,kB,'ne'), overlap=rows[0].lo<rows[1].hi;
+  $('m3Text').innerHTML=miniLight(R.color)+`${R.sig?'<b>Rechazas H₀</b>':'<b>No puedes rechazar H₀</b>'} (p = ${fmtP(p)}). Los rangos ${overlap?'aún se solapan':'ya no se solapan'}. Para detectar esta diferencia el 80 % de las veces harían falta unas <b>${fmtInt(m3Need)}</b> empresas por país.`;
+}
+$('m3N').addEventListener('input',m3);
+
+/* ---------- 7d: antes y después ---------- */
+let m4Mode='pair';
+const M4=(()=>{ const d=CASES['num-pair'].def().x, b=parseNums(d.before), a=parseNums(d.after), df=a.map((v,i)=>v-b[i]);
+  return {b,a,df,pp:signFlip(df,10000,SEED,'ne'),pi:perm2(b,a,10000,SEED,'ne'),md:mean(df)}; })();
+function m4(){
+  $('m4Seg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.m===m4Mode));
+  const {b,a,md}=M4, n=b.length, W=cwid('m4Chart'), H=m4Mode==='pair'?n*14+36:120, x=v=>40+(v-8)/9*(W-56);
+  let s=svgO(W,H);
+  if(m4Mode==='pair'){ for(let i=0;i<n;i++){ const yy=12+i*14; s+=`<line x1="${x(b[i])}" x2="${x(a[i])}" y1="${yy}" y2="${yy}" stroke="var(--muted)" stroke-width="2"/><circle cx="${x(b[i])}" cy="${yy}" r="4.5" fill="var(--dot)" stroke="var(--muted)"/><circle cx="${x(a[i])}" cy="${yy}" r="4.5" fill="var(--accent)"/>`; } }
+  else { [['antes',b,'var(--muted)',30],['después',a,'var(--accent)',70]].forEach(([nm,v,c,yy])=>{ s+=`<text class="lb" x="4" y="${yy+4}">${nm}</text>`; v.forEach((q,i)=>{ s+=`<circle cx="${x(q)}" cy="${yy+((i*7)%11-5)}" r="5" fill="${c}" opacity=".6"/>`; }); s+=`<line x1="${x(mean(v))}" x2="${x(mean(v))}" y1="${yy-14}" y2="${yy+14}" stroke="${c}" stroke-width="3"/>`; }); }
+  const yb=H-18; s+=`<line class="ax" x1="40" x2="${W-16}" y1="${yb}" y2="${yb}"/>`; for(const t of [8,10,12,14,16]) s+=`<text class="tk" x="${x(t)}" y="${yb+14}" text-anchor="middle">${t} k€</text>`;
+  $('m4Chart').innerHTML=s+'</svg>'+(m4Mode==='pair'?'<div class="sq-cap"><span style="color:var(--muted)">●</span> antes · <span style="color:var(--accent)">●</span> después — cada fila es una empresa</div>':'');
+  const p=m4Mode==='pair'?M4.pp:M4.pi, col=colorP(p,0.05), sig=p<=0.05;
+  $('m4Text').innerHTML=miniLight(col)+(m4Mode==='pair'
+    ?`Mirando el cambio de cada empresa, casi todas bajan: el cambio medio es de <b>${fnum(md)} k€</b> y sería muy raro por azar (p = ${fmtP(p)}). ${sig?'<b>Rechazas H₀.</b>':'<b>No puedes rechazar H₀.</b>'}`
+    :`Si ignoras que son las mismas empresas, la bajada de ${fnum(md)} k€ se pierde entre lo distintas que son unas empresas de otras (p = ${fmtP(p)}). ${sig?'<b>Rechazas H₀.</b>':'<b>No puedes rechazar H₀.</b>'}`);
+}
+$('m4Seg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b){ m4Mode=b.dataset.m; m4(); } });
+
+/* ---------- 7e: ganador claro ---------- */
+function m5(){
+  const f=+$('m5K').value, base=[52,41,30,17], cnt=base.map(v=>v*f), n=cnt.reduce((a,b)=>a+b,0), names=['Proveedor A','Proveedor B','Proveedor C','Proveedor D'];
+  $('m5Out').textContent=fmtInt(n);
+  $('m5Chart').innerHTML=catBars(names,[{label:'votos',counts:cnt,color:'var(--accent)'}]).replace(/(<rect[^>]*y="(?:\d+\.?\d*)")/g,'$1');
+  const p=binomTest(cnt[0]+cnt[1],cnt[0],0.5,'gt'), R=CASES['cat-thr'].analyze({label:'proveedor',rows:names.map((nm,i)=>({name:nm,c:cnt[i]}))},{alpha:0.05});
+  $('m5Text').innerHTML=miniLight(R.color)+`Con ${fmtInt(n)} respuestas, A tiene ${fmtInt(cnt[0])} votos y B ${fmtInt(cnt[1])}. Solo cuentan esas <b>${fmtInt(cnt[0]+cnt[1])}</b>: si empataran, una ventaja así saldría un ${fmtP(p)} de las veces. `+(R.sig?'<b>Rechazas H₀: A gana de verdad.</b>':'<b>No puedes rechazar el empate.</b>');
+}
+$('m5K').addEventListener('input',m5);
+
+/* ---------- Hipótesis en el veredicto de la calculadora ---------- */
+function hypOf(k,d,alt){
+  const A=esc(d.nameA||'A'), B=esc(d.nameB||'B'), u=esc(d.unit||''), l=esc(d.label||''), up=alt==='gt', dn=alt==='lt', rel=up?'como mucho':dn?'al menos':'igual a';
+  switch(k){
+    case 'bin-thr': return [`El porcentaje de ${u} que ${l} es ${rel} ${esc(d.p0)} %`,`Es ${altWord(alt)} ${esc(d.p0)} %`];
+    case 'bin-two': case 'num-two': case 'cnt-two': return [`${A} y ${B} son iguales`,alt==='ne'?`${A} y ${B} son distintos`:`${B} es ${up?'mayor':'menor'} que ${A}`];
+    case 'bin-pair': case 'num-pair': case 'cnt-pair': return ['No ha cambiado nada',alt==='ne'?'Ha cambiado':up?'Ha aumentado':'Ha bajado'];
+    case 'num-thr': return [`La media es ${rel} ${esc(d.mu0)} ${u}`,`La media es ${altWord(alt)} ${esc(d.mu0)} ${u}`];
+    case 'cnt-thr': return [`La tasa es ${rel} ${esc(d.r0)} por ${esc(d.per)}`,`La tasa es ${altWord(alt)} ${esc(d.r0)} por ${esc(d.per)}`];
+    case 'cat-thr': return ['Las dos opciones más votadas empatan','La más votada es la preferida de verdad'];
+    case 'cat-two': return [`${A} y ${B} reparten igual sus preferencias`,'Las reparten de forma distinta'];
+    case 'cat-pair': return ['Nadie cambia de opción de forma sistemática','Las preferencias han cambiado'];
+  } return null;
+}
+const _renderVerdict=renderVerdict;
+renderVerdict=function(R){
+  _renderVerdict(R); if(R.error||R.kind!=='test') return;
+  const k=key(), c=CASES[k], H=hypOf(k,APP.data[k],APP.alt[k]||c.altDef||'ne'); if(!H) return;
+  const body=$('verdict').children[1];
+  body.insertAdjacentHTML('afterbegin',`<div class="hyp"><div><span class="htag h0">H₀</span>${H[0]}</div><div><span class="htag h1">H₁</span>${H[1]}</div></div>`);
+  body.querySelector('.v-title').insertAdjacentHTML('afterend',`<div class="decision ${R.sig?'yes':'no'}">${R.sig?'✔ Rechazas H₀ → te quedas con H₁':'✖ No puedes rechazar H₀'}</div>`);
+};
+
+sc1(); scI(); sc3(); sc2(); scP(); m1(); m2(); m3(); m4(); m5();
+window.addEventListener('resize',()=>{ clearTimeout(window._scr); window._scr=setTimeout(()=>{ sc1(); scI(); sc2(); scP(); m1(); m2(); m3(); m4(); },200); });
 </script>
 </body>
 </html>
